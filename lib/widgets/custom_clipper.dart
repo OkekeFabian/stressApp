@@ -8,7 +8,7 @@ enum ClipType { bottom, semiCircle, halfCircle, multiple }
 class MyCustomClipper extends CustomClipper<Path> {
   ClipType clipType;
 
-  MyCustomClipper({required this.clipType});
+  MyCustomClipper({this.clipType});
 
   @override
   getClip(Size size) {

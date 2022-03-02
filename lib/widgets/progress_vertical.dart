@@ -7,8 +7,7 @@ class ProgressVertical extends StatelessWidget {
   final String date;
   final bool isShowDate;
 
-  ProgressVertical(
-      {required this.value, required this.date, required this.isShowDate});
+  ProgressVertical({this.value, this.date, this.isShowDate});
 
   @override
   Widget build(BuildContext context) {

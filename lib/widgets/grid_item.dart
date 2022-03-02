@@ -12,13 +12,13 @@ class GridItem extends StatelessWidget {
   final String remarks;
 
   GridItem({
-    required this.status,
-    required this.value,
-    required this.unit,
-    required this.time,
-    required this.image,
-    required this.remarks,
-    required this.color,
+    this.status,
+    this.value,
+    this.unit,
+    this.time,
+    this.image,
+    this.remarks,
+    this.color,
   });
 
   @override

@@ -13,12 +13,12 @@ class CardItems extends StatelessWidget {
   final int progress;
 
   CardItems({
-    required this.image,
-    required this.title,
-    required this.value,
-    required this.unit,
-    required this.color,
-    required this.progress,
+    this.image,
+    this.title,
+    this.value,
+    this.unit,
+    this.color,
+    this.progress,
   });
 
   @override

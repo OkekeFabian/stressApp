@@ -12,12 +12,7 @@ class CardMain extends StatelessWidget {
   final String unit;
   final Color color;
 
-  CardMain(
-      {required this.image,
-      required this.title,
-      required this.value,
-      required this.unit,
-      required this.color});
+  CardMain({this.image, this.title, this.value, this.unit, this.color});
 
   @override
   Widget build(BuildContext context) {

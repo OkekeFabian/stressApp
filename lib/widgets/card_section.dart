@@ -13,12 +13,7 @@ class CardSection extends StatelessWidget {
   final bool isDone;
 
   CardSection(
-      {required this.title,
-      required this.value,
-      required this.unit,
-      required this.time,
-      required this.image,
-      required this.isDone});
+      {this.title, this.value, this.unit, this.time, this.image, this.isDone});
 
   @override
   Widget build(BuildContext context) {
