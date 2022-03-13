@@ -6,6 +6,8 @@ import 'package:stress_app/widgets/grid_item.dart';
 import 'package:stress_app/widgets/progress_vertical.dart';
 
 class DetailScreen extends StatelessWidget {
+  const DetailScreen({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     double statusBarHeight = MediaQuery.of(context).padding.top;
@@ -67,9 +69,9 @@ class DetailScreen extends StatelessWidget {
                             onPressed: () {
                               Navigator.pop(context);
                             },
-                            child: Icon(Icons.arrow_back_ios,
+                            child: const Icon(Icons.arrow_back_ios,
                                 size: 15.0, color: Colors.white),
-                            shape: CircleBorder(
+                            shape: const CircleBorder(
                               side: BorderSide(
                                   color: Colors.white,
                                   width: 2,
@@ -77,24 +79,24 @@ class DetailScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                        SizedBox(width: 20),
+                        const SizedBox(width: 20),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
-                            Text(
+                            const Text(
                               "Heartbeat",
                               style: TextStyle(
                                   fontSize: 25,
                                   fontWeight: FontWeight.w900,
                                   color: Colors.white),
                             ),
-                            SizedBox(height: 10),
+                            const SizedBox(height: 10),
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.baseline,
                               mainAxisAlignment: MainAxisAlignment.start,
                               textBaseline: TextBaseline.alphabetic,
-                              children: <Widget>[
+                              children: const <Widget>[
                                 Text(
                                   "66",
                                   style: TextStyle(
@@ -114,23 +116,24 @@ class DetailScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    Spacer(),
+                    const Spacer(),
                     Image(
                         fit: BoxFit.cover,
-                        image: AssetImage('assets/icons/heartbeatthin.png'),
+                        image:
+                            const AssetImage('assets/icons/heartbeatthin.png'),
                         height: 73,
                         width: 80,
                         color: Colors.white.withOpacity(1)),
                   ],
                 ),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
                 // Chart
                 Material(
                   shadowColor: Colors.grey.withOpacity(0.01), // added
                   type: MaterialType.card,
-                  elevation: 10, borderRadius: new BorderRadius.circular(10.0),
+                  elevation: 10, borderRadius: BorderRadius.circular(10.0),
                   child: Container(
-                    padding: EdgeInsets.all(20.0),
+                    padding: const EdgeInsets.all(20.0),
                     height: 300,
                     child: Column(
                       children: <Widget>[
@@ -139,28 +142,29 @@ class DetailScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
                             Container(
-                              margin: EdgeInsets.all(10.0),
+                              margin: const EdgeInsets.all(10.0),
                               width: 10,
                               height: 10,
                               decoration: BoxDecoration(
                                   color: Constants.lightGreen,
                                   shape: BoxShape.circle),
                             ),
-                            Text("Rest"),
+                            const Text("Rest"),
                             Container(
-                              margin: EdgeInsets.only(left: 10.0, right: 10.0),
+                              margin: const EdgeInsets.only(
+                                  left: 10.0, right: 10.0),
                               width: 10,
                               height: 10,
                               decoration: BoxDecoration(
                                   color: Constants.darkGreen,
                                   shape: BoxShape.circle),
                             ),
-                            Text("Active"),
+                            const Text("Active"),
                           ],
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         // Main Cards - Heartbeat and Blood Pressure
-                        Container(
+                        SizedBox(
                           height: 100,
                           child: ListView(
                             scrollDirection: Axis.horizontal,
@@ -208,13 +212,13 @@ class DetailScreen extends StatelessWidget {
                             ],
                           ),
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         // Line Graph
                         Expanded(
                           child: Container(
-                              decoration: new BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0)),
+                              decoration: BoxDecoration(
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(10.0)),
                                 shape: BoxShape.rectangle,
                                 color: Constants.darkGreen,
                               ),
@@ -222,9 +226,9 @@ class DetailScreen extends StatelessWidget {
                                 clipper: MyCustomClipper(
                                     clipType: ClipType.multiple),
                                 child: Container(
-                                    decoration: new BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10.0)),
+                                    decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(10.0)),
                                   shape: BoxShape.rectangle,
                                   color: Constants.lightGreen,
                                 )),
@@ -234,75 +238,73 @@ class DetailScreen extends StatelessWidget {
                     ),
                   ), // added
                 ),
-                SizedBox(height: 30),
-                Container(
-                  child: new GridView.builder(
-                    shrinkWrap: true,
-                    primary: false,
-                    physics: NeverScrollableScrollPhysics(),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: _crossAxisCount,
-                      crossAxisSpacing: _crossAxisSpacing,
-                      mainAxisSpacing: _mainAxisSpacing,
-                      childAspectRatio: _aspectRatio,
-                    ),
-                    itemCount: 4,
-                    itemBuilder: (BuildContext context, int index) {
-                      switch (index) {
-                        case 0:
-                          return GridItem(
-                              status: "Rest",
-                              time: "4h 45m",
-                              value: "76",
-                              unit: "avg bpm",
-                              color: Constants.darkGreen,
-                              image: AssetImage("assets/icons/Battery.png"),
-                              remarks: "ok");
-                          break;
-                        case 1:
-                          return GridItem(
-                              status: "Active",
-                              time: "30m",
-                              value: "82",
-                              unit: "avg bpm",
-                              color: Constants.darkOrange,
-                              image: AssetImage("assets/icons/Battery.png"),
-                              remarks: "ok");
-                          break;
-                        case 2:
-                          return GridItem(
-                              status: "Fitness Level",
-                              time: "",
-                              value: "82",
-                              unit: "avg bpm",
-                              color: Constants.darkOrange,
-                              image: AssetImage("assets/icons/Heart.png"),
-                              remarks: "Fit");
-                          break;
-                        case 3:
-                          return GridItem(
-                              status: "Endurance",
-                              time: "",
-                              value: "82",
-                              unit: "avg bpm",
-                              color: Constants.darkOrange,
-                              image: AssetImage("assets/icons/Battery.png"),
-                              remarks: "Ok");
-                          break;
-                        default:
-                          return GridItem(
+                const SizedBox(height: 30),
+                GridView.builder(
+                  shrinkWrap: true,
+                  primary: false,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: _crossAxisCount,
+                    crossAxisSpacing: _crossAxisSpacing,
+                    mainAxisSpacing: _mainAxisSpacing,
+                    childAspectRatio: _aspectRatio,
+                  ),
+                  itemCount: 4,
+                  itemBuilder: (BuildContext context, int index) {
+                    switch (index) {
+                      case 0:
+                        return GridItem(
                             status: "Rest",
                             time: "4h 45m",
                             value: "76",
                             unit: "avg bpm",
-                            image: AssetImage("assets/icons/Battery.png"),
-                            remarks: "ok",
+                            color: Constants.darkGreen,
+                            image: const AssetImage("assets/icons/Battery.png"),
+                            remarks: "ok");
+                        break;
+                      case 1:
+                        return GridItem(
+                            status: "Active",
+                            time: "30m",
+                            value: "82",
+                            unit: "avg bpm",
                             color: Constants.darkOrange,
-                          );
-                          break;
-                      }
-                    },
-                  ),
+                            image: const AssetImage("assets/icons/Battery.png"),
+                            remarks: "ok");
+                        break;
+                      case 2:
+                        return GridItem(
+                            status: "Fitness Level",
+                            time: "",
+                            value: "82",
+                            unit: "avg bpm",
+                            color: Constants.darkOrange,
+                            image: const AssetImage("assets/icons/Heart.png"),
+                            remarks: "Fit");
+                        break;
+                      case 3:
+                        return GridItem(
+                            status: "Endurance",
+                            time: "",
+                            value: "82",
+                            unit: "avg bpm",
+                            color: Constants.darkOrange,
+                            image: const AssetImage("assets/icons/Battery.png"),
+                            remarks: "Ok");
+                        break;
+                      default:
+                        return GridItem(
+                          status: "Rest",
+                          time: "4h 45m",
+                          value: "76",
+                          unit: "avg bpm",
+                          image: const AssetImage("assets/icons/Battery.png"),
+                          remarks: "ok",
+                          color: Constants.darkOrange,
+                        );
+                        break;
+                    }
+                  },
                 ),
               ],
             ),

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stress_app/utils/const.dart';
 
@@ -12,7 +11,7 @@ class CardItems extends StatelessWidget {
   final Color color;
   final int progress;
 
-  CardItems({
+  const CardItems({
     this.image,
     this.title,
     this.value,
@@ -24,7 +23,7 @@ class CardItems extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: 20),
+      margin: const EdgeInsets.only(bottom: 20),
       height: 100,
       decoration: const BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -38,7 +37,7 @@ class CardItems extends StatelessWidget {
               clipper: MyCustomClipper(clipType: ClipType.halfCircle),
               child: Container(
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  borderRadius: const BorderRadius.all(Radius.circular(10.0)),
                   color: color.withOpacity(0.1),
                 ),
                 height: 100,
@@ -47,14 +46,14 @@ class CardItems extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(20.0),
+            padding: const EdgeInsets.all(20.0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 // Icon and Hearbeat
                 image,
-                SizedBox(width: 30),
+                const SizedBox(width: 30),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -77,7 +76,7 @@ class CardItems extends StatelessWidget {
                           ),
                         ],
                       ),
-                      SizedBox(height: 15),
+                      const SizedBox(height: 15),
                       (progress == 0 || progress == null)
                           ? Text('Not started',
                               style: TextStyle(

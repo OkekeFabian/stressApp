@@ -33,7 +33,7 @@ class _HomePageState extends State<HomePage> {
           ClipPath(
             clipper: MyCustomClipper(clipType: ClipType.bottom),
             child: Container(
-              color: Theme.of(context).accentColor,
+              color: Theme.of(context).colorScheme.onSecondary,
               height: Constants.headerHeight + statusBarHeight,
             ),
           ),
@@ -76,7 +76,7 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(height: 50),
 
                 // Main Cards - Heartbeat and Blood Pressure
-                Container(
+                SizedBox(
                   height: 140,
                   child: ListView(
                     scrollDirection: Axis.horizontal,
@@ -89,7 +89,7 @@ class _HomePageState extends State<HomePage> {
                         color: Constants.lightGreen,
                       ),
                       CardMain(
-                          image: AssetImage('assets/icons/blooddrop.png'),
+                          image: const AssetImage('assets/icons/blooddrop.png'),
                           title: "Blood Pressure",
                           value: "66/123",
                           unit: "mmHg",
@@ -110,7 +110,7 @@ class _HomePageState extends State<HomePage> {
                       fontWeight: FontWeight.bold),
                 ),
 
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Container(
                   child: (weightSaves.isEmpty)
                       ? const SizedBox(
@@ -153,7 +153,7 @@ class _HomePageState extends State<HomePage> {
       _listViewScrollController.animateTo(
         weightSaves.length * _itemExtent,
         duration: const Duration(microseconds: 1),
-        curve: ElasticInCurve(0.01),
+        curve: const ElasticInCurve(0.01),
       );
     });
   }
