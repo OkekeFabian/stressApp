@@ -42,6 +42,7 @@ dependencies:
   numberpicker: ^2.1.1
   font_awesome_flutter:
   splashscreen:
+  flutter_tts:
 
 dev_dependencies:
   flutter_test:

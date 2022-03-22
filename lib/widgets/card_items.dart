@@ -63,7 +63,8 @@ class CardItems extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            '$title',
+                            title,
+                            //'$title',
                             style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stress_app/utils/const.dart';
 import 'package:stress_app/widgets/custom_clipper.dart';

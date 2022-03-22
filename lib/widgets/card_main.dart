@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stress_app/screens/detail_screen.dart';
 import 'package:stress_app/utils/const.dart';
@@ -12,7 +11,7 @@ class CardMain extends StatelessWidget {
   final String unit;
   final Color color;
 
-  CardMain({this.image, this.title, this.value, this.unit, this.color});
+  const CardMain({this.image, this.title, this.value, this.unit, this.color});
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +47,7 @@ class CardMain extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(20.0),
+                  padding: const EdgeInsets.all(20.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -57,7 +56,7 @@ class CardMain extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Image(width: 35, height: 35, image: image),
-                          SizedBox(
+                          const SizedBox(
                             width: 10,
                           ),
                           Expanded(
@@ -70,7 +69,7 @@ class CardMain extends StatelessWidget {
                           ),
                         ],
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Text(
                         value,
                         style: TextStyle(
@@ -93,7 +92,7 @@ class CardMain extends StatelessWidget {
               debugPrint("CARD main clicked. redirect to details page");
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => DetailScreen()),
+                MaterialPageRoute(builder: (context) => const DetailScreen()),
               );
             },
           ),

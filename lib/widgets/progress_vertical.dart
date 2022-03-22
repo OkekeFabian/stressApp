@@ -7,12 +7,12 @@ class ProgressVertical extends StatelessWidget {
   final String date;
   final bool isShowDate;
 
-  ProgressVertical({this.value, this.date, this.isShowDate});
+  const ProgressVertical({this.value, this.date, this.isShowDate});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: EdgeInsets.only(right: 7),
+        margin: const EdgeInsets.only(right: 7),
         width: 30,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -22,7 +22,7 @@ class ProgressVertical extends StatelessWidget {
               child: Container(
                 width: 10,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(3.0)),
+                  borderRadius: const BorderRadius.all(Radius.circular(3.0)),
                   shape: BoxShape.rectangle,
                   color: Constants.lightGreen,
                 ),
@@ -35,7 +35,7 @@ class ProgressVertical extends StatelessWidget {
                         child: Container(
                           decoration: BoxDecoration(
                             borderRadius:
-                                BorderRadius.all(Radius.circular(3.0)),
+                                const BorderRadius.all(Radius.circular(3.0)),
                             shape: BoxShape.rectangle,
                             color: Constants.darkGreen,
                           ),
@@ -48,7 +48,7 @@ class ProgressVertical extends StatelessWidget {
                 }),
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Text((isShowDate) ? date : ""),
           ],
         ));

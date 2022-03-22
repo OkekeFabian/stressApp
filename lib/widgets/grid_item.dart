@@ -24,13 +24,13 @@ class GridItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(10.0)),
         shape: BoxShape.rectangle,
         color: Colors.white,
       ),
       child: Padding(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -43,14 +43,14 @@ class GridItem extends StatelessWidget {
                 ),
                 Text(
                   time,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 15,
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             (image == null)
                 ? Column(
                     children: <Widget>[
@@ -63,7 +63,7 @@ class GridItem extends StatelessWidget {
                       ),
                       Text(
                         unit,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 15,
                         ),
                       ),
@@ -78,7 +78,7 @@ class GridItem extends StatelessWidget {
                       ),
                       Text(
                         remarks,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold),
                       ),
                     ],

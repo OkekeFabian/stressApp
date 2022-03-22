@@ -2,12 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:stress_app/utils/const.dart';
-
+import 'package:flutter/services.dart';
 import '../widgets/card_main.dart';
 import '../widgets/custom_clipper.dart';
 import '../widgets/situation_class.dart';
 import '../widgets/situation_entry_dialog.dart';
 import '../widgets/situation_list_item.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key key, this.title}) : super(key: key);
@@ -18,10 +19,15 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  // method channel
+  static const batteryChannel = MethodChannel("stress_app/battery");
+  String batteryLevel = "wait";
+
   List<WeightEntry> weightSaves = [];
   final ScrollController _listViewScrollController = ScrollController();
   final double _itemExtent = 50.0;
   bool isSwitched = false;
+  final FlutterTts flutterTts = FlutterTts();
 
   @override
   Widget build(BuildContext context) {
@@ -110,6 +116,15 @@ class _HomePageState extends State<HomePage> {
                       fontWeight: FontWeight.bold),
                 ),
 
+                Text(
+                  batteryLevel,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 30),
+                ),
+                ElevatedButton(
+                    onPressed: getBatteryLevel,
+                    child: const Text("get Battery Level")),
+
                 const SizedBox(height: 20),
                 Container(
                   child: (weightSaves.isEmpty)
@@ -132,7 +147,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
       floatingActionButton: ElevatedButton.icon(
@@ -186,5 +201,19 @@ class _HomePageState extends State<HomePage> {
     if (save != null) {
       _addWeightSave(save);
     }
+  }
+
+  Future getBatteryLevel() async {
+    final int newBatteryLevel =
+        await batteryChannel.invokeMethod("getBatteryLevel");
+    setState(() {
+      batteryLevel = '$newBatteryLevel';
+    });
+    await Future.delayed(Duration(seconds: 1));
+    _speak();
+  }
+
+  Future _speak() async {
+    await flutterTts.speak("trun lights off and turn room on");
   }
 }

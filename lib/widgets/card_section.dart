@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stress_app/utils/const.dart';
 
@@ -12,7 +11,7 @@ class CardSection extends StatelessWidget {
   final ImageProvider image;
   final bool isDone;
 
-  CardSection(
+  const CardSection(
       {this.title, this.value, this.unit, this.time, this.image, this.isDone});
 
   @override
@@ -34,7 +33,7 @@ class CardSection extends StatelessWidget {
                 clipper: MyCustomClipper(clipType: ClipType.semiCircle),
                 child: Container(
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    borderRadius: const BorderRadius.all(Radius.circular(10.0)),
                     color: Constants.lightBlue.withOpacity(0.1),
                   ),
                   height: 120,
@@ -54,7 +53,7 @@ class CardSection extends StatelessWidget {
                         image: image,
                         width: 24,
                         height: 24,
-                        color: Theme.of(context).accentColor,
+                        color: Theme.of(context).colorScheme.secondary,
                       ),
                       Text(
                         time,
@@ -88,16 +87,16 @@ class CardSection extends StatelessWidget {
                           ],
                         ),
                       ),
-                      SizedBox(width: 10),
+                      const SizedBox(width: 10),
                       InkWell(
                         child: Container(
                           decoration: BoxDecoration(
                             borderRadius:
-                                BorderRadius.all(Radius.circular(10.0)),
+                                const BorderRadius.all(Radius.circular(10.0)),
                             shape: BoxShape.rectangle,
                             color: isDone
-                                ? Theme.of(context).accentColor
-                                : Color(0xFFF0F4F8),
+                                ? Theme.of(context).colorScheme.secondary
+                                : const Color(0xFFF0F4F8),
                           ),
                           width: 44,
                           height: 44,
