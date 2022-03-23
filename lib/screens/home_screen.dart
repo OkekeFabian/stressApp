@@ -4,11 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:stress_app/utils/const.dart';
 import 'package:flutter/services.dart';
 import '../widgets/card_main.dart';
+import '../widgets/card_section.dart';
 import '../widgets/custom_clipper.dart';
 import '../widgets/situation_class.dart';
 import '../widgets/situation_entry_dialog.dart';
 import '../widgets/situation_list_item.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+
+import 'detail_screen.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key key, this.title}) : super(key: key);
@@ -39,7 +42,7 @@ class _HomePageState extends State<HomePage> {
           ClipPath(
             clipper: MyCustomClipper(clipType: ClipType.bottom),
             child: Container(
-              color: Theme.of(context).colorScheme.onSecondary,
+              color: Colors.blueAccent,
               height: Constants.headerHeight + statusBarHeight,
             ),
           ),
@@ -107,6 +110,93 @@ class _HomePageState extends State<HomePage> {
 
                 // Section Cards - Daily Medication
                 const SizedBox(height: 50),
+                Text(
+                  "Features",
+                  style: TextStyle(
+                      color: Constants.textPrimary,
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold),
+                ),
+
+                const SizedBox(height: 20),
+
+                SizedBox(
+                    height: 125,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: <Widget>[
+                        GestureDetector(
+                          onTap: () {
+                            debugPrint(
+                                "CARD main clicked. redirect to details page");
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const DetailScreen()),
+                            );
+                          },
+                          child: CardSection(
+                            image: AssetImage('assets/icons/capsule.png'),
+                            title: "Stress Relief",
+                            value: "2",
+                            unit: "pills",
+                            time: "6-7AM",
+                            isDone: false,
+                          ),
+                        ),
+                        CardSection(
+                          image: AssetImage('assets/icons/capsule.png'),
+                          title: "Nightmare",
+                          value: "2",
+                          unit: "pills",
+                          time: "6-7AM",
+                          isDone: false,
+                        ),
+                        CardSection(
+                          image: AssetImage('assets/icons/syringe.png'),
+                          title: "Hand-washing",
+                          value: "1",
+                          unit: "shot",
+                          time: "8-9AM",
+                          isDone: true,
+                        ),
+                        CardSection(
+                          image: AssetImage('assets/icons/syringe.png'),
+                          title: "Breathing",
+                          value: "1",
+                          unit: "shot",
+                          time: "8-9AM",
+                          isDone: true,
+                        ),
+                        CardSection(
+                          image: AssetImage('assets/icons/syringe.png'),
+                          title: "Mood doctor",
+                          value: "1",
+                          unit: "shot",
+                          time: "8-9AM",
+                          isDone: true,
+                        ),
+                        CardSection(
+                          image: AssetImage('assets/icons/capsule.png'),
+                          title: "Sitting Session",
+                          value: "2",
+                          unit: "pills",
+                          time: "6-7AM",
+                          isDone: false,
+                        ),
+                        CardSection(
+                          image: AssetImage('assets/icons/capsule.png'),
+                          title: "Morning Motivation",
+                          value: "2",
+                          unit: "pills",
+                          time: "6-7AM",
+                          isDone: false,
+                        ),
+                      ],
+                    )),
+
+                const SizedBox(height: 50),
+
                 // Scheduled Activities
                 Text(
                   "SCHEDULED ACTIVITIES",

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'screens/home_screen.dart';
+import 'screens/register.dart';
 import 'utils/const.dart';
 
 void main() {
@@ -16,7 +17,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: Constants.appName,
       debugShowCheckedModeBanner: false,
-      home: const HomePage(),
+      home: RegisterScreen()
+      //const HomePage()
+      ,
     );
   }
 }
