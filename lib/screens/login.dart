@@ -36,7 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
       child: Scaffold(
         backgroundColor: Constants.backgroundColor,
         body: SingleChildScrollView(
-          physics: ClampingScrollPhysics(),
+          physics: const ClampingScrollPhysics(),
           child: Stack(
             children: [
               ClipPath(
@@ -57,13 +57,13 @@ class _LoginScreenState extends State<LoginScreen> {
                       children: [
                         Container(
                           alignment: Alignment.centerLeft,
-                          padding: EdgeInsets.symmetric(
+                          padding: const EdgeInsets.symmetric(
                               horizontal: 40, vertical: 30),
-                          child: Text(
+                          child: const Text(
                             "Login",
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                color: Color(0xFF2661FA),
+                                color: Colors.white,
                                 fontSize: 24),
                             textAlign: TextAlign.left,
                           ),
@@ -71,31 +71,33 @@ class _LoginScreenState extends State<LoginScreen> {
                         SizedBox(height: size.height * 0.035),
                         Container(
                           alignment: Alignment.center,
-                          margin: EdgeInsets.symmetric(horizontal: 40),
+                          margin: const EdgeInsets.symmetric(horizontal: 40),
                           child: TextFormField(
                             validator: (String val) =>
                                 val.isEmpty ? 'Please enter email' : null,
-                            decoration: InputDecoration(labelText: "Username"),
+                            decoration:
+                                const InputDecoration(labelText: "Username"),
                             controller: emailController,
                           ),
                         ),
                         SizedBox(height: size.height * 0.03),
                         Container(
                           alignment: Alignment.center,
-                          margin: EdgeInsets.symmetric(horizontal: 40),
+                          margin: const EdgeInsets.symmetric(horizontal: 40),
                           child: TextFormField(
                             validator: (String val) =>
                                 val.isEmpty ? 'Please enter password' : null,
-                            decoration: InputDecoration(labelText: "Password"),
+                            decoration:
+                                const InputDecoration(labelText: "Password"),
                             controller: passwordController,
                             obscureText: true,
                           ),
                         ),
                         Container(
                           alignment: Alignment.centerRight,
-                          margin: EdgeInsets.symmetric(
+                          margin: const EdgeInsets.symmetric(
                               horizontal: 40, vertical: 10),
-                          child: Text(
+                          child: const Text(
                             "Forgot your password?",
                             style: TextStyle(
                                 fontSize: 12, color: Color(0XFF2661FA)),
@@ -104,7 +106,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         Center(
                           child: Text(
                             error,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Color.fromRGBO(216, 181, 58, 1.0),
                                 fontSize: 14.0),
                           ),
@@ -112,12 +114,13 @@ class _LoginScreenState extends State<LoginScreen> {
                         SizedBox(height: size.height * 0.035),
                         Container(
                           alignment: Alignment.centerRight,
-                          margin: EdgeInsets.symmetric(
+                          margin: const EdgeInsets.symmetric(
                               horizontal: 40, vertical: 10),
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               primary: Colors.redAccent,
-                              side: BorderSide(width: 3, color: Colors.brown),
+                              side: const BorderSide(
+                                  width: 3, color: Colors.brown),
                               elevation: 3,
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(80.0)),
@@ -132,13 +135,15 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: const Text(
                               "LOGIN",
                               textAlign: TextAlign.center,
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
                             ),
                           ),
                         ),
                         Container(
                           alignment: Alignment.centerRight,
-                          margin: EdgeInsets.symmetric(
+                          margin: const EdgeInsets.symmetric(
                               horizontal: 40, vertical: 10),
                           child: GestureDetector(
                             onTap: () => {
@@ -147,12 +152,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                   MaterialPageRoute(
                                       builder: (context) => RegisterScreen()))
                             },
-                            child: Text(
+                            child: const Text(
                               "Don't Have an Account? Sign up",
                               style: TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.bold,
-                                  color: Color(0xFF2661FA)),
+                                  color: const Color(0xFF2661FA)),
                             ),
                           ),
                         )

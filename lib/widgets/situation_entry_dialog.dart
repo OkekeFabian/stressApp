@@ -4,12 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 import 'package:lottie/lottie.dart';
-import 'package:meta/meta.dart';
 
 import 'situation_class.dart';
 
 class WeightEntryDialog extends StatefulWidget {
-  final int initialWeight;
+  final String initialWeight;
   final WeightEntry weighEntryToEdit;
 
   WeightEntryDialog.add(this.initialWeight) : weighEntryToEdit = null;
@@ -36,7 +35,7 @@ class WeightEntryDialog extends StatefulWidget {
 
 class WeightEntryDialogState extends State<WeightEntryDialog> {
   DateTime _dateTime = DateTime.now();
-  int _weight;
+  String _weight;
   String _note;
   String _note2;
   String _note3;
@@ -124,7 +123,9 @@ class WeightEntryDialogState extends State<WeightEntryDialog> {
                       ),
                     ),
                     onSelected: (String value) {
-                      _weight = int.parse(value);
+                      setState(() {
+                        _weight = value;
+                      });
                     },
                     itemBuilder: (context) {
                       return topicOptions

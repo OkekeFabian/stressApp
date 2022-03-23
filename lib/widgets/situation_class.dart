@@ -1,6 +1,6 @@
 class WeightEntry {
   DateTime dateTime;
-  int weight;
+  String weight;
   String note;
   String note2;
   String note3;

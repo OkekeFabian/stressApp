@@ -4,8 +4,31 @@ import 'package:stress_app/widgets/custom_clipper.dart';
 import 'package:stress_app/widgets/grid_item.dart';
 import 'package:stress_app/widgets/progress_vertical.dart';
 
-class DetailScreen extends StatelessWidget {
+import 'package:flutter/services.dart';
+
+import '../widgets/custom_clipper.dart';
+import '../widgets/situation_class.dart';
+import '../widgets/situation_entry_dialog.dart';
+import '../widgets/situation_list_item.dart';
+import 'package:flutter_tts/flutter_tts.dart';
+
+class DetailScreen extends StatefulWidget {
   const DetailScreen({Key key}) : super(key: key);
+
+  @override
+  State<DetailScreen> createState() => _DetailScreenState();
+}
+
+class _DetailScreenState extends State<DetailScreen> {
+  // method channel
+  static const batteryChannel = MethodChannel("stress_app/battery");
+  String batteryLevel = "0";
+
+  List<WeightEntry> weightSaves = [];
+  final ScrollController _listViewScrollController = ScrollController();
+  final double _itemExtent = 50.0;
+  bool isSwitched = false;
+  final FlutterTts flutterTts = FlutterTts();
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +107,7 @@ class DetailScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
                             const Text(
-                              "Heartbeat",
+                              "Nightmare",
                               style: TextStyle(
                                   fontSize: 25,
                                   fontWeight: FontWeight.w900,
@@ -133,13 +156,13 @@ class DetailScreen extends StatelessWidget {
                   elevation: 10, borderRadius: BorderRadius.circular(10.0),
                   child: Container(
                     padding: const EdgeInsets.all(20.0),
-                    height: 300,
+                    height: 210,
                     child: Column(
-                      children: <Widget>[
+                      children: [
                         // Rest Active Legend
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
+                          children: [
                             Container(
                               margin: const EdgeInsets.all(10.0),
                               width: 10,
@@ -167,76 +190,97 @@ class DetailScreen extends StatelessWidget {
                           height: 100,
                           child: ListView(
                             scrollDirection: Axis.horizontal,
-                            children: <Widget>[
+                            children: const [
                               ProgressVertical(
                                 value: 50,
-                                date: "5/11",
+                                date: "M",
                                 isShowDate: true,
                               ),
                               ProgressVertical(
                                 value: 50,
-                                date: "5/12",
-                                isShowDate: false,
+                                date: "T",
+                                isShowDate: true,
                               ),
                               ProgressVertical(
                                 value: 45,
-                                date: "5/13",
-                                isShowDate: false,
+                                date: "W",
+                                isShowDate: true,
                               ),
                               ProgressVertical(
                                 value: 30,
-                                date: "5/14",
+                                date: "T",
                                 isShowDate: true,
                               ),
                               ProgressVertical(
                                 value: 50,
-                                date: "5/15",
-                                isShowDate: false,
-                              ),
-                              ProgressVertical(
-                                value: 20,
-                                date: "5/16",
-                                isShowDate: false,
-                              ),
-                              ProgressVertical(
-                                value: 45,
-                                date: "5/17",
+                                date: "F",
                                 isShowDate: true,
                               ),
                               ProgressVertical(
-                                value: 67,
-                                date: "5/18",
-                                isShowDate: false,
+                                value: 20,
+                                date: "S",
+                                isShowDate: true,
+                              ),
+                              ProgressVertical(
+                                value: 45,
+                                date: "S",
+                                isShowDate: true,
                               ),
                             ],
                           ),
                         ),
                         const SizedBox(height: 20),
                         // Line Graph
-                        Expanded(
-                          child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(10.0)),
-                                shape: BoxShape.rectangle,
-                                color: Constants.darkGreen,
-                              ),
-                              child: ClipPath(
-                                clipper: MyCustomClipper(
-                                    clipType: ClipType.multiple),
-                                child: Container(
-                                    decoration: BoxDecoration(
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(10.0)),
-                                  shape: BoxShape.rectangle,
-                                  color: Constants.lightGreen,
-                                )),
-                              )),
-                        ),
                       ],
                     ),
                   ), // added
                 ),
+                const SizedBox(height: 30),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                        onPressed: getBatteryLevel,
+                        child: const Text("Simulate Trigger")),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: ElevatedButton(
+                          onPressed: _openAddEntryDialog,
+                          child: const Text("Enter a Google Home Command")),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 20),
+                Text(
+                  "SCHEDULED ACTIVITIES",
+                  style: TextStyle(
+                      color: Constants.textPrimary,
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 20),
+                Container(
+                  child: (weightSaves.isEmpty)
+                      ? const SizedBox(
+                          child: Text(
+                              'Please Press the button above to Enter a Command'),
+                          height: 40.0,
+                        )
+                      : ListView.builder(
+                          shrinkWrap: true,
+                          reverse: true,
+                          controller: _listViewScrollController,
+                          itemCount: weightSaves.length,
+                          itemBuilder: (buildContext, index) {
+                            return InkWell(
+                                onTap: () => _editEntry(weightSaves[index]),
+                                child: WeightListItem(
+                                    weightSaves[index], index + 1));
+                          },
+                        ),
+                ),
+
                 const SizedBox(height: 30),
                 GridView.builder(
                   shrinkWrap: true,
@@ -311,5 +355,61 @@ class DetailScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void _addWeightSave(WeightEntry weightSave) {
+    setState(() {
+      weightSaves.add(weightSave);
+      _listViewScrollController.animateTo(
+        weightSaves.length * _itemExtent,
+        duration: const Duration(microseconds: 1),
+        curve: const ElasticInCurve(0.01),
+      );
+    });
+  }
+
+  _editEntry(WeightEntry weightSave) {
+    Navigator.of(context)
+        .push(
+      MaterialPageRoute<WeightEntry>(
+        builder: (BuildContext context) {
+          return WeightEntryDialog.edit(weightSave);
+        },
+        fullscreenDialog: true,
+      ),
+    )
+        .then((newSave) {
+      if (newSave != null) {
+        setState(() => weightSaves[weightSaves.indexOf(weightSave)] = newSave);
+      }
+    });
+  }
+
+  Future _openAddEntryDialog() async {
+    WeightEntry save =
+        await Navigator.of(context).push(MaterialPageRoute<WeightEntry>(
+            builder: (BuildContext context) {
+              return WeightEntryDialog.add(
+                  weightSaves.isNotEmpty ? weightSaves.last.weight : 'Never');
+            },
+            fullscreenDialog: true));
+    if (save != null) {
+      _addWeightSave(save);
+    }
+  }
+
+  Future getBatteryLevel() async {
+    final int newBatteryLevel =
+        await batteryChannel.invokeMethod("getBatteryLevel");
+    setState(() {
+      batteryLevel = '$newBatteryLevel';
+    });
+    await Future.delayed(const Duration(seconds: 1));
+    _speak();
+  }
+
+  Future _speak() async {
+    debugPrint(weightSaves[0].note2);
+    await flutterTts.speak(weightSaves[0].note2);
   }
 }

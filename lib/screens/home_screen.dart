@@ -1,15 +1,9 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:stress_app/utils/const.dart';
-import 'package:flutter/services.dart';
 import '../widgets/card_main.dart';
 import '../widgets/card_section.dart';
 import '../widgets/custom_clipper.dart';
 import '../widgets/situation_class.dart';
-import '../widgets/situation_entry_dialog.dart';
-import '../widgets/situation_list_item.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 
 import 'detail_screen.dart';
 
@@ -22,15 +16,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // method channel
-  static const batteryChannel = MethodChannel("stress_app/battery");
-  String batteryLevel = "wait";
-
-  List<WeightEntry> weightSaves = [];
-  final ScrollController _listViewScrollController = ScrollController();
-  final double _itemExtent = 50.0;
   bool isSwitched = false;
-  final FlutterTts flutterTts = FlutterTts();
 
   @override
   Widget build(BuildContext context) {
@@ -124,7 +110,7 @@ class _HomePageState extends State<HomePage> {
                     height: 125,
                     child: ListView(
                       scrollDirection: Axis.horizontal,
-                      children: <Widget>[
+                      children: [
                         GestureDetector(
                           onTap: () {
                             debugPrint(
@@ -135,24 +121,24 @@ class _HomePageState extends State<HomePage> {
                                   builder: (context) => const DetailScreen()),
                             );
                           },
-                          child: CardSection(
+                          child: const CardSection(
                             image: AssetImage('assets/icons/capsule.png'),
-                            title: "Stress Relief",
+                            title: "Nightmare",
                             value: "2",
                             unit: "pills",
                             time: "6-7AM",
                             isDone: false,
                           ),
                         ),
-                        CardSection(
+                        const CardSection(
                           image: AssetImage('assets/icons/capsule.png'),
-                          title: "Nightmare",
+                          title: "Stress Relief",
                           value: "2",
                           unit: "pills",
                           time: "6-7AM",
                           isDone: false,
                         ),
-                        CardSection(
+                        const CardSection(
                           image: AssetImage('assets/icons/syringe.png'),
                           title: "Hand-washing",
                           value: "1",
@@ -160,23 +146,23 @@ class _HomePageState extends State<HomePage> {
                           time: "8-9AM",
                           isDone: true,
                         ),
-                        CardSection(
-                          image: AssetImage('assets/icons/syringe.png'),
+                        const CardSection(
+                          image: const AssetImage('assets/icons/syringe.png'),
                           title: "Breathing",
                           value: "1",
                           unit: "shot",
                           time: "8-9AM",
                           isDone: true,
                         ),
-                        CardSection(
-                          image: AssetImage('assets/icons/syringe.png'),
+                        const CardSection(
+                          image: const AssetImage('assets/icons/syringe.png'),
                           title: "Mood doctor",
                           value: "1",
                           unit: "shot",
                           time: "8-9AM",
                           isDone: true,
                         ),
-                        CardSection(
+                        const CardSection(
                           image: AssetImage('assets/icons/capsule.png'),
                           title: "Sitting Session",
                           value: "2",
@@ -184,7 +170,7 @@ class _HomePageState extends State<HomePage> {
                           time: "6-7AM",
                           isDone: false,
                         ),
-                        CardSection(
+                        const CardSection(
                           image: AssetImage('assets/icons/capsule.png'),
                           title: "Morning Motivation",
                           value: "2",
@@ -194,116 +180,11 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ],
                     )),
-
-                const SizedBox(height: 50),
-
-                // Scheduled Activities
-                Text(
-                  "SCHEDULED ACTIVITIES",
-                  style: TextStyle(
-                      color: Constants.textPrimary,
-                      fontSize: 13,
-                      fontWeight: FontWeight.bold),
-                ),
-
-                Text(
-                  batteryLevel,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 30),
-                ),
-                ElevatedButton(
-                    onPressed: getBatteryLevel,
-                    child: const Text("get Battery Level")),
-
-                const SizedBox(height: 20),
-                Container(
-                  child: (weightSaves.isEmpty)
-                      ? const SizedBox(
-                          child: Text(
-                              'Please Press the + button to Enter a Command'),
-                          height: 40.0,
-                        )
-                      : ListView.builder(
-                          shrinkWrap: true,
-                          reverse: true,
-                          controller: _listViewScrollController,
-                          itemCount: weightSaves.length,
-                          itemBuilder: (buildContext, index) {
-                            return InkWell(
-                                onTap: () => _editEntry(weightSaves[index]),
-                                child: WeightListItem(weightSaves[index]));
-                          },
-                        ),
-                ),
               ],
             ),
           ),
         ],
       ),
-      floatingActionButton: ElevatedButton.icon(
-        label: const Text('Add Command'),
-        icon: const Icon(Icons.add),
-        style: ElevatedButton.styleFrom(
-          primary: Colors.blue, // background
-          onPrimary: Colors.white, // foreground
-        ),
-        onPressed: _openAddEntryDialog,
-      ),
     );
-  }
-
-  void _addWeightSave(WeightEntry weightSave) {
-    setState(() {
-      weightSaves.add(weightSave);
-      _listViewScrollController.animateTo(
-        weightSaves.length * _itemExtent,
-        duration: const Duration(microseconds: 1),
-        curve: const ElasticInCurve(0.01),
-      );
-    });
-  }
-
-  _editEntry(WeightEntry weightSave) {
-    Navigator.of(context)
-        .push(
-      MaterialPageRoute<WeightEntry>(
-        builder: (BuildContext context) {
-          return WeightEntryDialog.edit(weightSave);
-        },
-        fullscreenDialog: true,
-      ),
-    )
-        .then((newSave) {
-      if (newSave != null) {
-        setState(() => weightSaves[weightSaves.indexOf(weightSave)] = newSave);
-      }
-    });
-  }
-
-  Future _openAddEntryDialog() async {
-    WeightEntry save =
-        await Navigator.of(context).push(MaterialPageRoute<WeightEntry>(
-            builder: (BuildContext context) {
-              return WeightEntryDialog.add(
-                  weightSaves.isNotEmpty ? weightSaves.last.weight : 0);
-            },
-            fullscreenDialog: true));
-    if (save != null) {
-      _addWeightSave(save);
-    }
-  }
-
-  Future getBatteryLevel() async {
-    final int newBatteryLevel =
-        await batteryChannel.invokeMethod("getBatteryLevel");
-    setState(() {
-      batteryLevel = '$newBatteryLevel';
-    });
-    await Future.delayed(Duration(seconds: 1));
-    _speak();
-  }
-
-  Future _speak() async {
-    await flutterTts.speak("trun lights off and turn room on");
   }
 }

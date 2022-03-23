@@ -8,10 +8,9 @@ import 'situation_class.dart';
 
 class WeightListItem extends StatelessWidget {
   final WeightEntry weightEntry;
+  final int index;
 
-  WeightListItem(
-    this.weightEntry,
-  );
+  WeightListItem(this.weightEntry, this.index);
 
   @override
   Widget build(BuildContext context) {
@@ -45,10 +44,12 @@ class WeightListItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 // Icon and Hearbea
-                Image.asset(
-                  'assets/icons/Walking.png',
+                Text(
+                  index.toString() + '.',
+                  textScaleFactor: 2.0,
+                  textAlign: TextAlign.center,
                 ),
-                SizedBox(width: 30),
+                const SizedBox(width: 30),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
