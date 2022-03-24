@@ -4,9 +4,8 @@ import 'package:stress_app/utils/const.dart';
 import 'custom_clipper.dart';
 import 'command_class.dart';
 
-/**
- * Adds Entered Commands to the details_screen
- */
+//Adds Entered Commands to the details_screen
+
 class CommandListItem extends StatelessWidget {
   final CommandEntry commandEntry;
   final int index;
@@ -24,7 +23,7 @@ class CommandListItem extends StatelessWidget {
         color: Colors.white,
       ),
       child: Stack(
-        children: <Widget>[
+        children: [
           Positioned(
             child: ClipPath(
               clipper: MyCustomClipper(clipType: ClipType.halfCircle),
@@ -74,7 +73,7 @@ class CommandListItem extends StatelessWidget {
                           ),
                         ],
                       ),
-                      SizedBox(height: 15),
+                      const SizedBox(height: 15),
                       Container(
                         height: 6,
                         decoration: const BoxDecoration(

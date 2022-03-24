@@ -188,7 +188,7 @@ class _DetailScreenState extends State<DetailScreen> {
                           height: 100,
                           child: ListView(
                             scrollDirection: Axis.horizontal,
-                            children: const [
+                            children: [
                               ProgressVertical(
                                 value: 50,
                                 date: "M",

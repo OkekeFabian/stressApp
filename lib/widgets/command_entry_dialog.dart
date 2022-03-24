@@ -180,7 +180,7 @@ class DateTimeItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: <Widget>[
+      children: [
         Expanded(
           child: InkWell(
             onTap: (() => _showDatePicker(context)),
