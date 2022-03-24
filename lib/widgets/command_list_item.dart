@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:stress_app/utils/const.dart';
-//import 'package:weight_tracker/model/weight_entry.dart';
-
 import 'custom_clipper.dart';
-import 'situation_class.dart';
+import 'command_class.dart';
 
-class WeightListItem extends StatelessWidget {
-  final WeightEntry weightEntry;
+/**
+ * Adds Entered Commands to the details_screen
+ */
+class CommandListItem extends StatelessWidget {
+  final CommandEntry commandEntry;
   final int index;
 
-  WeightListItem(this.weightEntry, this.index);
+  CommandListItem(this.commandEntry, this.index);
 
   @override
   Widget build(BuildContext context) {
@@ -54,19 +55,19 @@ class WeightListItem extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
+                    children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
+                        children: [
                           Text(
-                            DateFormat.MMMEd().format(weightEntry.dateTime),
+                            DateFormat.MMMEd().format(commandEntry.dateTime),
                             style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                                 color: Constants.textPrimary),
                           ),
                           Text(
-                            TimeOfDay.fromDateTime(weightEntry.dateTime)
+                            TimeOfDay.fromDateTime(commandEntry.dateTime)
                                 .toString(),
                             style: TextStyle(
                                 fontSize: 15, color: Constants.textPrimary),

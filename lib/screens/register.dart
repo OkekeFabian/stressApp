@@ -126,27 +126,31 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       alignment: Alignment.centerRight,
                       margin: const EdgeInsets.symmetric(
                           horizontal: 40, vertical: 10),
-                      child: RaisedButton(
+                      child: ElevatedButton(
                         onPressed: () async {},
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(80.0)),
-                        textColor: Colors.white,
-                        padding: const EdgeInsets.all(0),
-                        child: Container(
-                          alignment: Alignment.center,
-                          height: 50.0,
-                          width: size.width * 0.5,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(80.0),
-                              gradient: const LinearGradient(colors: [
-                                Color.fromARGB(255, 255, 136, 34),
-                                Color.fromARGB(255, 255, 177, 41)
-                              ])),
-                          padding: const EdgeInsets.all(0),
-                          child: const Text(
-                            "SIGN UP",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(80.0)),
+                          onPrimary: Colors.white,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            alignment: Alignment.center,
+                            height: 50.0,
+                            width: size.width * 0.5,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(80.0),
+                                gradient: const LinearGradient(colors: [
+                                  Color.fromARGB(255, 255, 136, 34),
+                                  Color.fromARGB(255, 255, 177, 41)
+                                ])),
+                            padding: const EdgeInsets.all(0),
+                            child: const Text(
+                              "SIGN UP",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
                           ),
                         ),
                       ),

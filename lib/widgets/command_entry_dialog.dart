@@ -5,46 +5,39 @@ import 'package:intl/intl.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 import 'package:lottie/lottie.dart';
 
-import 'situation_class.dart';
+import 'command_class.dart';
 
-class WeightEntryDialog extends StatefulWidget {
-  final String initialWeight;
-  final WeightEntry weighEntryToEdit;
+//For the User to add Google Commands with other details
 
-  WeightEntryDialog.add(this.initialWeight) : weighEntryToEdit = null;
+class CommandEntryDialog extends StatefulWidget {
+  final String initialDay;
+  final CommandEntry commandEntryToEdit;
 
-  WeightEntryDialog.edit(this.weighEntryToEdit)
-      : initialWeight = weighEntryToEdit.weight;
+  CommandEntryDialog.add(this.initialDay) : commandEntryToEdit = null;
+
+  CommandEntryDialog.edit(this.commandEntryToEdit)
+      : initialDay = commandEntryToEdit.command;
 
   @override
   // ignore: no_logic_in_create_state
-  WeightEntryDialogState createState() {
-    if (weighEntryToEdit != null) {
-      return WeightEntryDialogState(
-          weighEntryToEdit.dateTime,
-          weighEntryToEdit.weight,
-          weighEntryToEdit.note,
-          weighEntryToEdit.note2,
-          weighEntryToEdit.note3);
+  CommandEntryDialogState createState() {
+    if (commandEntryToEdit != null) {
+      return CommandEntryDialogState(commandEntryToEdit.dateTime,
+          commandEntryToEdit.day, commandEntryToEdit.command);
     } else {
-      return WeightEntryDialogState(
-          DateTime.now(), initialWeight, null, null, null);
+      return CommandEntryDialogState(DateTime.now(), initialDay, null);
     }
   }
 }
 
-class WeightEntryDialogState extends State<WeightEntryDialog> {
+class CommandEntryDialogState extends State<CommandEntryDialog> {
   DateTime _dateTime = DateTime.now();
-  String _weight;
-  String _note;
-  String _note2;
-  String _note3;
+  String _day;
+  String _command;
 
-  TextEditingController _textController;
   TextEditingController _textController2;
-  TextEditingController _textController3;
 
-  List<String> topicOptions = [
+  List<String> dayOptions = [
     'Every Monday',
     'Every Tuesday',
     'Every Wednesday',
@@ -54,19 +47,17 @@ class WeightEntryDialogState extends State<WeightEntryDialog> {
     'Every Sunday',
   ];
 
-  WeightEntryDialogState(
-      this._dateTime, this._weight, this._note, this._note2, this._note3);
+  CommandEntryDialogState(this._dateTime, this._day, this._command);
 
   Widget _createAppBar(BuildContext context) {
     return AppBar(
-      title: widget.weighEntryToEdit == null
+      title: widget.commandEntryToEdit == null
           ? const Text("New entry")
           : const Text("Edit entry"),
       actions: [
         ElevatedButton(
           onPressed: () {
-            Navigator.of(context)
-                .pop(WeightEntry(_dateTime, _weight, _note, _note2, _note3));
+            Navigator.of(context).pop(CommandEntry(_dateTime, _day, _command));
           },
           child: const Text(
             'SAVE',
@@ -86,9 +77,7 @@ class WeightEntryDialogState extends State<WeightEntryDialog> {
   @override
   void initState() {
     super.initState();
-    _textController = TextEditingController(text: _note);
-    _textController2 = TextEditingController(text: _note2);
-    _textController3 = TextEditingController(text: _note3);
+    _textController2 = TextEditingController(text: _command);
   }
 
   @override
@@ -119,16 +108,16 @@ class WeightEntryDialogState extends State<WeightEntryDialog> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 20),
                       child: Text(
-                        _weight.toString(),
+                        _command.toString(),
                       ),
                     ),
                     onSelected: (String value) {
                       setState(() {
-                        _weight = value;
+                        _command = value;
                       });
                     },
                     itemBuilder: (context) {
-                      return topicOptions
+                      return dayOptions
                           .map<PopupMenuItem<String>>((String value) {
                         return PopupMenuItem(
                             child: Text(value.toString()), value: value);
@@ -162,7 +151,7 @@ class WeightEntryDialogState extends State<WeightEntryDialog> {
                     hintText: """ e.g Turn on the Light for 20 minutes""",
                   ),
                   controller: _textController2,
-                  onChanged: (value) => _note2 = value,
+                  onChanged: (value) => _command = value,
                 ),
               ),
             ],

@@ -3,8 +3,6 @@ import 'package:stress_app/utils/const.dart';
 import '../widgets/card_main.dart';
 import '../widgets/card_section.dart';
 import '../widgets/custom_clipper.dart';
-import '../widgets/situation_class.dart';
-
 import 'detail_screen.dart';
 
 class HomePage extends StatefulWidget {
@@ -121,7 +119,7 @@ class _HomePageState extends State<HomePage> {
                                   builder: (context) => const DetailScreen()),
                             );
                           },
-                          child: const CardSection(
+                          child: CardSection(
                             image: AssetImage('assets/icons/capsule.png'),
                             title: "Nightmare",
                             value: "2",
@@ -130,7 +128,7 @@ class _HomePageState extends State<HomePage> {
                             isDone: false,
                           ),
                         ),
-                        const CardSection(
+                        CardSection(
                           image: AssetImage('assets/icons/capsule.png'),
                           title: "Stress Relief",
                           value: "2",
@@ -138,7 +136,7 @@ class _HomePageState extends State<HomePage> {
                           time: "6-7AM",
                           isDone: false,
                         ),
-                        const CardSection(
+                        CardSection(
                           image: AssetImage('assets/icons/syringe.png'),
                           title: "Hand-washing",
                           value: "1",
@@ -146,7 +144,7 @@ class _HomePageState extends State<HomePage> {
                           time: "8-9AM",
                           isDone: true,
                         ),
-                        const CardSection(
+                        CardSection(
                           image: const AssetImage('assets/icons/syringe.png'),
                           title: "Breathing",
                           value: "1",
@@ -154,7 +152,7 @@ class _HomePageState extends State<HomePage> {
                           time: "8-9AM",
                           isDone: true,
                         ),
-                        const CardSection(
+                        CardSection(
                           image: const AssetImage('assets/icons/syringe.png'),
                           title: "Mood doctor",
                           value: "1",
@@ -162,7 +160,7 @@ class _HomePageState extends State<HomePage> {
                           time: "8-9AM",
                           isDone: true,
                         ),
-                        const CardSection(
+                        CardSection(
                           image: AssetImage('assets/icons/capsule.png'),
                           title: "Sitting Session",
                           value: "2",
@@ -170,7 +168,7 @@ class _HomePageState extends State<HomePage> {
                           time: "6-7AM",
                           isDone: false,
                         ),
-                        const CardSection(
+                        CardSection(
                           image: AssetImage('assets/icons/capsule.png'),
                           title: "Morning Motivation",
                           value: "2",

@@ -3,6 +3,7 @@ import 'dart:convert';
 import '../utils/const.dart';
 import '../widgets/custom_clipper.dart';
 import 'home_screen.dart';
+import 'onboarding_screen.dart';
 import 'register.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -130,7 +131,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => const HomePage()))
+                                      builder: (context) =>
+                                          const OnboardingScreen()))
                             },
                             child: const Text(
                               "LOGIN",

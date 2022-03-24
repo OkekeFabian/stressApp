@@ -11,7 +11,7 @@ class CardSection extends StatelessWidget {
   final ImageProvider image;
   final bool isDone;
 
-  const CardSection(
+  CardSection(
       {this.title, this.value, this.unit, this.time, this.image, this.isDone});
 
   @override

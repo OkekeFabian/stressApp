@@ -3,13 +3,11 @@ import 'package:stress_app/utils/const.dart';
 import 'package:stress_app/widgets/custom_clipper.dart';
 import 'package:stress_app/widgets/grid_item.dart';
 import 'package:stress_app/widgets/progress_vertical.dart';
-
 import 'package:flutter/services.dart';
-
 import '../widgets/custom_clipper.dart';
-import '../widgets/situation_class.dart';
-import '../widgets/situation_entry_dialog.dart';
-import '../widgets/situation_list_item.dart';
+import '../widgets/command_class.dart';
+import '../widgets/command_entry_dialog.dart';
+import '../widgets/command_list_item.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
 class DetailScreen extends StatefulWidget {
@@ -24,7 +22,7 @@ class _DetailScreenState extends State<DetailScreen> {
   static const batteryChannel = MethodChannel("stress_app/battery");
   String batteryLevel = "0";
 
-  List<WeightEntry> weightSaves = [];
+  List<CommandEntry> commandSaves = [];
   final ScrollController _listViewScrollController = ScrollController();
   final double _itemExtent = 50.0;
   bool isSwitched = false;
@@ -261,7 +259,7 @@ class _DetailScreenState extends State<DetailScreen> {
                 ),
                 const SizedBox(height: 20),
                 Container(
-                  child: (weightSaves.isEmpty)
+                  child: (commandSaves.isEmpty)
                       ? const SizedBox(
                           child: Text(
                               'Please Press the button above to Enter a Command'),
@@ -271,12 +269,12 @@ class _DetailScreenState extends State<DetailScreen> {
                           shrinkWrap: true,
                           reverse: true,
                           controller: _listViewScrollController,
-                          itemCount: weightSaves.length,
+                          itemCount: commandSaves.length,
                           itemBuilder: (buildContext, index) {
                             return InkWell(
-                                onTap: () => _editEntry(weightSaves[index]),
-                                child: WeightListItem(
-                                    weightSaves[index], index + 1));
+                                onTap: () => _editEntry(commandSaves[index]),
+                                child: CommandListItem(
+                                    commandSaves[index], index + 1));
                           },
                         ),
                 ),
@@ -357,47 +355,52 @@ class _DetailScreenState extends State<DetailScreen> {
     );
   }
 
-  void _addWeightSave(WeightEntry weightSave) {
+  void _addcommandSave(CommandEntry commandSave) {
     setState(() {
-      weightSaves.add(weightSave);
+      commandSaves.add(commandSave);
       _listViewScrollController.animateTo(
-        weightSaves.length * _itemExtent,
+        commandSaves.length * _itemExtent,
         duration: const Duration(microseconds: 1),
         curve: const ElasticInCurve(0.01),
       );
     });
   }
 
-  _editEntry(WeightEntry weightSave) {
+  // edit an already added google home command
+  _editEntry(CommandEntry commandSave) {
     Navigator.of(context)
         .push(
-      MaterialPageRoute<WeightEntry>(
+      MaterialPageRoute<CommandEntry>(
         builder: (BuildContext context) {
-          return WeightEntryDialog.edit(weightSave);
+          return CommandEntryDialog.edit(commandSave);
         },
         fullscreenDialog: true,
       ),
     )
         .then((newSave) {
       if (newSave != null) {
-        setState(() => weightSaves[weightSaves.indexOf(weightSave)] = newSave);
+        setState(
+            () => commandSaves[commandSaves.indexOf(commandSave)] = newSave);
       }
     });
   }
 
+  // Add a google home command
   Future _openAddEntryDialog() async {
-    WeightEntry save =
-        await Navigator.of(context).push(MaterialPageRoute<WeightEntry>(
+    CommandEntry save =
+        await Navigator.of(context).push(MaterialPageRoute<CommandEntry>(
             builder: (BuildContext context) {
-              return WeightEntryDialog.add(
-                  weightSaves.isNotEmpty ? weightSaves.last.weight : 'Never');
+              return CommandEntryDialog.add(commandSaves.isNotEmpty
+                  ? commandSaves.last.command
+                  : 'Never');
             },
             fullscreenDialog: true));
     if (save != null) {
-      _addWeightSave(save);
+      _addcommandSave(save);
     }
   }
 
+  // Communicating and calling native kotlin for the google assistant
   Future getBatteryLevel() async {
     final int newBatteryLevel =
         await batteryChannel.invokeMethod("getBatteryLevel");
@@ -408,8 +411,9 @@ class _DetailScreenState extends State<DetailScreen> {
     _speak();
   }
 
+  // Text to Speech for the google assistant
   Future _speak() async {
-    debugPrint(weightSaves[0].note2);
-    await flutterTts.speak(weightSaves[0].note2);
+    debugPrint(commandSaves[0].command);
+    await flutterTts.speak(commandSaves[0].command);
   }
 }
