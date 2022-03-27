@@ -9,6 +9,7 @@ import '../widgets/command_class.dart';
 import '../widgets/command_entry_dialog.dart';
 import '../widgets/command_list_item.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class DetailScreen extends StatefulWidget {
   const DetailScreen({Key key}) : super(key: key);
@@ -21,6 +22,7 @@ class _DetailScreenState extends State<DetailScreen> {
   // method channel
   static const batteryChannel = MethodChannel("stress_app/battery");
   String batteryLevel = "0";
+  double rating = 0;
 
   List<CommandEntry> commandSaves = [];
   final ScrollController _listViewScrollController = ScrollController();
@@ -71,11 +73,11 @@ class _DetailScreenState extends State<DetailScreen> {
             padding: EdgeInsets.all(Constants.paddingSide),
             child: ListView(
               scrollDirection: Axis.vertical,
-              children: <Widget>[
+              children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
+                  children: [
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -233,7 +235,36 @@ class _DetailScreenState extends State<DetailScreen> {
                     ),
                   ), // added
                 ),
+
                 const SizedBox(height: 30),
+                Center(
+                  child: Column(
+                    children: [
+                      Text(
+                        'Rate your sleep: $rating',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      const SizedBox(height: 10),
+                      RatingBar.builder(
+                          minRating: 1,
+                          itemSize: 20,
+                          itemPadding: EdgeInsets.symmetric(horizontal: 4),
+                          updateOnDrag: true,
+                          itemBuilder: (context, _) =>
+                              Icon(Icons.star, color: Colors.amber),
+                          onRatingUpdate: (rating) => setState(() {
+                                this.rating = rating;
+                              })),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton.icon(
+                    onPressed: () {},
+                    icon: const Icon(Icons.share),
+                    label: const Text('Share sleep data')),
+                const SizedBox(height: 30),
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -280,6 +311,14 @@ class _DetailScreenState extends State<DetailScreen> {
                 ),
 
                 const SizedBox(height: 30),
+                Text(
+                  "STATS",
+                  style: TextStyle(
+                      color: Constants.textPrimary,
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 20),
                 GridView.builder(
                   shrinkWrap: true,
                   primary: false,
@@ -323,7 +362,8 @@ class _DetailScreenState extends State<DetailScreen> {
                             image: const AssetImage("assets/icons/Heart.png"),
                             remarks: "Fit");
                         break;
-                      case 3:
+
+                      default:
                         return GridItem(
                             status: "Endurance",
                             time: "",
@@ -332,17 +372,6 @@ class _DetailScreenState extends State<DetailScreen> {
                             color: Constants.darkOrange,
                             image: const AssetImage("assets/icons/Battery.png"),
                             remarks: "Ok");
-                        break;
-                      default:
-                        return GridItem(
-                          status: "Rest",
-                          time: "4h 45m",
-                          value: "76",
-                          unit: "avg bpm",
-                          image: const AssetImage("assets/icons/Battery.png"),
-                          remarks: "ok",
-                          color: Constants.darkOrange,
-                        );
                         break;
                     }
                   },

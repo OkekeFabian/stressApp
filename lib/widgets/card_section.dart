@@ -79,11 +79,6 @@ class CardSection extends StatelessWidget {
                                   color: Constants.textPrimary),
                             ),
                             const SizedBox(height: 5),
-                            Text(
-                              '$value $unit',
-                              style: TextStyle(
-                                  fontSize: 15, color: Constants.textPrimary),
-                            ),
                           ],
                         ),
                       ),
