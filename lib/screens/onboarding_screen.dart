@@ -18,7 +18,7 @@ class OnboardingScreen extends StatelessWidget {
   // to add LottieFIles
   Widget _buildImage(String assetName) {
     return Align(
-      child: Lottie.asset(assetName, width: 350.0),
+      child: Image.asset(assetName, width: 350.0),
       alignment: Alignment.bottomCenter,
     );
   }
@@ -34,15 +34,17 @@ class OnboardingScreen extends StatelessWidget {
     return IntroductionScreen(
       pages: [
         PageViewModel(
-          title: "",
-          body: "",
-          image: _buildImage('assets/json_images/therapy.json'),
+          title: "About Xtrinsic",
+          body:
+              "A smart app that would adapt your environment to your needs. Using a wearable Device and the power of Google AI we try to detect and help you get through your struggles throughout the day and night",
+          image: _buildImage("assets/icons/Xtrinsic.jpg"),
           decoration: pageDecoration,
         ),
         PageViewModel(
           title: "How to Use",
-          body: "",
-          image: _buildImage('assets/json_images/notes.json'),
+          body:
+              "You pick one of the features and then enter the set of google commands stored to your google home to assign to the features so they can be triggered in due time",
+          image: Center(child: Image.asset("assets/icons/howto.png")),
           decoration: pageDecoration,
         ),
       ],
