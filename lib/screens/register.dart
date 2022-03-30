@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import '../utils/const.dart';
 import '../widgets/custom_clipper.dart';
 import 'login.dart';
+import 'onboarding_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -127,7 +128,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       margin: const EdgeInsets.symmetric(
                           horizontal: 40, vertical: 10),
                       child: ElevatedButton(
-                        onPressed: () async {},
+                        onPressed: () => {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const OnboardingScreen()))
+                        },
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(80.0)),
