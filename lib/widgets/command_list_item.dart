@@ -10,7 +10,8 @@ class CommandListItem extends StatelessWidget {
   final CommandEntry commandEntry;
   final int index;
 
-  CommandListItem(this.commandEntry, this.index);
+  const CommandListItem(this.commandEntry, this.index, {Key key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

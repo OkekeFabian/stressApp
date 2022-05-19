@@ -2,12 +2,25 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stress_app/utils/const.dart';
 
-class ProgressVertical extends StatelessWidget {
+class ProgressVertical extends StatefulWidget {
   final int value;
   final String date;
   final bool isShowDate;
 
   ProgressVertical({this.value, this.date, this.isShowDate});
+
+  @override
+  State<ProgressVertical> createState() => _ProgressVerticalState();
+}
+
+class _ProgressVerticalState extends State<ProgressVertical> {
+  changeColor(int value) {
+    if (value <= 75) {
+      return Constants.darkGreen;
+    } else {
+      return Colors.red;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,9 +50,9 @@ class ProgressVertical extends StatelessWidget {
                             borderRadius:
                                 const BorderRadius.all(Radius.circular(3.0)),
                             shape: BoxShape.rectangle,
-                            color: Constants.darkGreen,
+                            color: changeColor(widget.value),
                           ),
-                          height: constraints.maxHeight * (value / 100),
+                          height: constraints.maxHeight * (widget.value / 100),
                           width: constraints.maxWidth,
                         ),
                       ),
@@ -49,7 +62,7 @@ class ProgressVertical extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10),
-            Text((isShowDate) ? date : ""),
+            Text((widget.isShowDate) ? widget.date : ""),
           ],
         ));
   }

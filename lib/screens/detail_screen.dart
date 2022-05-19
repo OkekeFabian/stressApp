@@ -30,6 +30,15 @@ class _DetailScreenState extends State<DetailScreen> {
   bool isSwitched = false;
   final FlutterTts flutterTts = FlutterTts();
 
+  int level = 45;
+
+  Widget _buildImage(String assetName) {
+    return Align(
+      child: Image.asset(assetName, width: 150.0),
+      alignment: Alignment.bottomCenter,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     double statusBarHeight = MediaQuery.of(context).padding.top;
@@ -171,7 +180,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                   color: Constants.lightGreen,
                                   shape: BoxShape.circle),
                             ),
-                            const Text("Rest"),
+                            const Text("Asleep"),
                             Container(
                               margin: const EdgeInsets.only(
                                   left: 10.0, right: 10.0),
@@ -181,7 +190,16 @@ class _DetailScreenState extends State<DetailScreen> {
                                   color: Constants.darkGreen,
                                   shape: BoxShape.circle),
                             ),
-                            const Text("Active"),
+                            const Text("Awake"),
+                            Container(
+                              margin: const EdgeInsets.only(
+                                  left: 10.0, right: 10.0),
+                              width: 10,
+                              height: 10,
+                              decoration: const BoxDecoration(
+                                  color: Colors.red, shape: BoxShape.circle),
+                            ),
+                            const Text("Nightmare"),
                           ],
                         ),
                         const SizedBox(height: 20),
@@ -193,37 +211,37 @@ class _DetailScreenState extends State<DetailScreen> {
                             children: [
                               ProgressVertical(
                                 value: 50,
-                                date: "M",
+                                date: "1",
                                 isShowDate: true,
                               ),
                               ProgressVertical(
                                 value: 50,
-                                date: "T",
+                                date: "2",
                                 isShowDate: true,
                               ),
                               ProgressVertical(
                                 value: 45,
-                                date: "W",
+                                date: "3",
                                 isShowDate: true,
                               ),
                               ProgressVertical(
                                 value: 30,
-                                date: "T",
+                                date: "4",
                                 isShowDate: true,
                               ),
                               ProgressVertical(
                                 value: 50,
-                                date: "F",
+                                date: "5",
                                 isShowDate: true,
                               ),
                               ProgressVertical(
                                 value: 20,
-                                date: "S",
+                                date: "6",
                                 isShowDate: true,
                               ),
                               ProgressVertical(
-                                value: 45,
-                                date: "S",
+                                value: level,
+                                date: "7",
                                 isShowDate: true,
                               ),
                             ],
@@ -242,16 +260,17 @@ class _DetailScreenState extends State<DetailScreen> {
                     children: [
                       Text(
                         'Rate your sleep: $rating',
-                        style: TextStyle(fontSize: 20),
+                        style: const TextStyle(fontSize: 20),
                       ),
                       const SizedBox(height: 10),
                       RatingBar.builder(
                           minRating: 1,
                           itemSize: 20,
-                          itemPadding: EdgeInsets.symmetric(horizontal: 4),
+                          itemPadding:
+                              const EdgeInsets.symmetric(horizontal: 4),
                           updateOnDrag: true,
                           itemBuilder: (context, _) =>
-                              Icon(Icons.star, color: Colors.amber),
+                              const Icon(Icons.star, color: Colors.amber),
                           onRatingUpdate: (rating) => setState(() {
                                 this.rating = rating;
                               })),
@@ -260,7 +279,36 @@ class _DetailScreenState extends State<DetailScreen> {
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton.icon(
-                    onPressed: () {},
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(40)),
+                              title: const Text('Share '),
+                              content: Container(
+                                child: Column(
+                                  children: [
+                                    _buildImage('assets/icons/doctor.jpg'),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    const Text(
+                                        "This will allow you to share your data with the doctor using secure connection with Google Firebase "),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    ElevatedButton.icon(
+                                        onPressed: () {},
+                                        icon: const Icon(Icons.share),
+                                        label: const Text('Share data')),
+                                  ],
+                                ),
+                              ),
+                            );
+                          });
+                    },
                     icon: const Icon(Icons.share),
                     label: const Text('Share sleep data')),
                 const SizedBox(height: 30),
@@ -269,7 +317,20 @@ class _DetailScreenState extends State<DetailScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     ElevatedButton(
-                        onPressed: getBatteryLevel,
+                        onPressed: (() {
+                          getBatteryLevel;
+                          setState(() {
+                            level = 90;
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                                    backgroundColor: Colors.red,
+                                    content: SizedBox(
+                                      height: 40,
+                                      child: Text(
+                                          'Nightmare detected, activating respective command'),
+                                    )));
+                          });
+                        }),
                         child: const Text("Simulate Trigger")),
                     const SizedBox(width: 10),
                     Expanded(
