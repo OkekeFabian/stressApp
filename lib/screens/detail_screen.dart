@@ -404,7 +404,7 @@ class _DetailScreenState extends State<DetailScreen> {
                       default:
                         return GridItem(
                           status: "Sleeping tips",
-                          color: Constants.darkOrange,
+                          color: Constants.lightBlue,
                           image: "assets/icons/sleep.jpeg",
                           title: "Sleeping Tips",
                           content:
