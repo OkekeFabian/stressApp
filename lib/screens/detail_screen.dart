@@ -34,7 +34,7 @@ class _DetailScreenState extends State<DetailScreen> {
 
   Widget _buildImage(String assetName) {
     return Align(
-      child: Image.asset(assetName, width: 150.0),
+      child: Image.asset(assetName, width: 100.0),
       alignment: Alignment.bottomCenter,
     );
   }
@@ -287,24 +287,22 @@ class _DetailScreenState extends State<DetailScreen> {
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(40)),
                               title: const Text('Share '),
-                              content: Container(
-                                child: Column(
-                                  children: [
-                                    _buildImage('assets/icons/doctor.jpg'),
-                                    const SizedBox(
-                                      height: 20,
-                                    ),
-                                    const Text(
-                                        "This will allow you to share your data with the doctor using secure connection with Google Firebase "),
-                                    const SizedBox(
-                                      height: 20,
-                                    ),
-                                    ElevatedButton.icon(
-                                        onPressed: () {},
-                                        icon: const Icon(Icons.share),
-                                        label: const Text('Share data')),
-                                  ],
-                                ),
+                              content: Column(
+                                children: [
+                                  _buildImage('assets/icons/doctor.jpg'),
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  const Text(
+                                      "This will allow you to share your data with the doctor using secure connection with Google Firebase "),
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  ElevatedButton.icon(
+                                      onPressed: () {},
+                                      icon: const Icon(Icons.share),
+                                      label: const Text('Share data')),
+                                ],
                               ),
                             );
                           });
@@ -373,7 +371,7 @@ class _DetailScreenState extends State<DetailScreen> {
 
                 const SizedBox(height: 30),
                 Text(
-                  "STATS",
+                  "MORE",
                   style: TextStyle(
                       color: Constants.textPrimary,
                       fontSize: 13,
@@ -390,49 +388,28 @@ class _DetailScreenState extends State<DetailScreen> {
                     mainAxisSpacing: _mainAxisSpacing,
                     childAspectRatio: _aspectRatio,
                   ),
-                  itemCount: 4,
+                  itemCount: 2,
                   itemBuilder: (BuildContext context, int index) {
                     switch (index) {
                       case 0:
                         return GridItem(
-                            status: "Rest",
-                            time: "4h 45m",
-                            value: "76",
-                            unit: "avg bpm",
-                            color: Constants.darkGreen,
-                            image: const AssetImage("assets/icons/Battery.png"),
-                            remarks: "ok");
+                          status: "Participate in a study",
+                          color: Constants.darkGreen,
+                          image: "assets/icons/research.jpg",
+                          title: "Research Study",
+                          content:
+                              "Read and join any of the ongoing study listed below",
+                        );
                         break;
-                      case 1:
-                        return GridItem(
-                            status: "Active",
-                            time: "30m",
-                            value: "82",
-                            unit: "avg bpm",
-                            color: Constants.darkOrange,
-                            image: const AssetImage("assets/icons/Battery.png"),
-                            remarks: "ok");
-                        break;
-                      case 2:
-                        return GridItem(
-                            status: "Fitness Level",
-                            time: "",
-                            value: "82",
-                            unit: "avg bpm",
-                            color: Constants.darkOrange,
-                            image: const AssetImage("assets/icons/Heart.png"),
-                            remarks: "Fit");
-                        break;
-
                       default:
                         return GridItem(
-                            status: "Endurance",
-                            time: "",
-                            value: "82",
-                            unit: "avg bpm",
-                            color: Constants.darkOrange,
-                            image: const AssetImage("assets/icons/Battery.png"),
-                            remarks: "Ok");
+                          status: "Sleeping tips",
+                          color: Constants.darkOrange,
+                          image: "assets/icons/sleep.jpeg",
+                          title: "Sleeping Tips",
+                          content:
+                              "Below are a list of tips to help you sleep better",
+                        );
                         break;
                     }
                   },

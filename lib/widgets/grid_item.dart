@@ -4,88 +4,85 @@ import 'package:stress_app/utils/const.dart';
 
 class GridItem extends StatelessWidget {
   final String status;
-  final String time;
-  final String value;
-  final String unit;
-  final ImageProvider image;
+  final String title;
+  final String content;
+  final String image;
   final Color color;
-  final String remarks;
 
-  GridItem({
+  const GridItem({
+    Key key,
     this.status,
-    this.value,
-    this.unit,
-    this.time,
+    this.title,
+    this.content,
     this.image,
-    this.remarks,
     this.color,
-  });
+  }) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-        shape: BoxShape.rectangle,
-        color: Colors.white,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  Widget _buildImage(String assetName) {
+    return Align(
+      child: Image.asset(assetName, width: 120.0),
+      alignment: Alignment.bottomCenter,
+    );
+  }
+
+  Future _popUp(context, String title, String content) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+            title: Text(title),
+            content: Column(
               children: [
-                Text(
-                  status,
-                  style: TextStyle(fontSize: 12, color: Constants.textPrimary),
-                ),
-                Text(
-                  time,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15,
-                  ),
+                Text(content),
+                const SizedBox(
+                  height: 20,
                 ),
               ],
             ),
-            const SizedBox(height: 10),
-            (image == null)
-                ? Column(
-                    children: <Widget>[
-                      Text(
-                        value,
-                        style: TextStyle(
-                            fontWeight: FontWeight.w900,
-                            fontSize: 35,
-                            color: color),
-                      ),
-                      Text(
-                        unit,
-                        style: const TextStyle(
-                          fontSize: 15,
-                        ),
-                      ),
-                    ],
-                  )
-                : Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Image(
-                        image: image,
-                      ),
-                      Text(
-                        remarks,
-                        style: const TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-          ],
+          );
+        });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+        child: Container(
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+            shape: BoxShape.rectangle,
+            color: Colors.white,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      status,
+                      style:
+                          TextStyle(fontSize: 12, color: Constants.textPrimary),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    _buildImage(image),
+                  ],
+                ),
+              ],
+            ),
+          ),
         ),
-      ),
-    );
+        onTap: () {
+          _popUp(context, title, content);
+        });
   }
 }
