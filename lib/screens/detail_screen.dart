@@ -31,6 +31,7 @@ class _DetailScreenState extends State<DetailScreen> {
   final FlutterTts flutterTts = FlutterTts();
 
   int level = 45;
+  int heartLevel = 66;
 
   Widget _buildImage(String assetName) {
     return Align(
@@ -52,6 +53,14 @@ class _DetailScreenState extends State<DetailScreen> {
         _crossAxisCount;
     double _aspectRatio =
         _width / (_cellHeight + _mainAxisSpacing + (_crossAxisCount + 1));
+
+    changeColor(int value) {
+      if (value <= 75) {
+        return Colors.white;
+      } else {
+        return Colors.red;
+      }
+    }
 
     return Scaffold(
       backgroundColor: Constants.backgroundColor,
@@ -127,16 +136,16 @@ class _DetailScreenState extends State<DetailScreen> {
                               crossAxisAlignment: CrossAxisAlignment.baseline,
                               mainAxisAlignment: MainAxisAlignment.start,
                               textBaseline: TextBaseline.alphabetic,
-                              children: const <Widget>[
+                              children: [
                                 Text(
-                                  "66",
+                                  heartLevel.toString(),
                                   style: TextStyle(
                                       fontSize: 48,
                                       fontWeight: FontWeight.w900,
-                                      color: Colors.white),
+                                      color: changeColor(heartLevel)),
                                 ),
-                                SizedBox(width: 10),
-                                Text(
+                                const SizedBox(width: 10),
+                                const Text(
                                   "bpm",
                                   style: TextStyle(
                                       fontSize: 20, color: Colors.white),
@@ -321,6 +330,7 @@ class _DetailScreenState extends State<DetailScreen> {
                           getBatteryLevel;
                           setState(() {
                             level = 90;
+                            heartLevel = 120;
                             ScaffoldMessenger.of(context)
                                 .showSnackBar(const SnackBar(
                                     backgroundColor: Colors.red,
