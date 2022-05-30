@@ -25,7 +25,7 @@ class CommandEntryDialog extends StatefulWidget {
       return CommandEntryDialogState(commandEntryToEdit.dateTime,
           commandEntryToEdit.day, commandEntryToEdit.command);
     } else {
-      return CommandEntryDialogState(DateTime.now(), initialDay, null);
+      return CommandEntryDialogState(DateTime.now(), initialDay, "Never");
     }
   }
 }
@@ -35,7 +35,7 @@ class CommandEntryDialogState extends State<CommandEntryDialog> {
   String _day;
   String _command;
 
-  TextEditingController _textController2;
+  final _textController2 = TextEditingController();
 
   List<String> dayOptions = [
     'Every Monday',
@@ -72,12 +72,6 @@ class CommandEntryDialogState extends State<CommandEntryDialog> {
       child: Lottie.asset(assetName, width: 150.0),
       alignment: Alignment.bottomCenter,
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _textController2 = TextEditingController(text: _command);
   }
 
   @override
@@ -143,15 +137,26 @@ class CommandEntryDialogState extends State<CommandEntryDialog> {
               ),
               ListTile(
                 leading: Icon(Icons.speaker_notes, color: Colors.grey[500]),
-                title: TextField(
-                  keyboardType: TextInputType.multiline,
-                  maxLines: null,
-                  minLines: 2,
-                  decoration: const InputDecoration(
-                    hintText: """ e.g Turn on the Light for 20 minutes""",
-                  ),
+                title: TextFormField(
+                  minLines: 3,
+                  maxLines: 6,
                   controller: _textController2,
-                  onChanged: (value) => _command = value,
+                  decoration: InputDecoration(
+                      border: const OutlineInputBorder(),
+                      labelText: "e.g Turn on the Light for 20 minutes",
+                      labelStyle: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontStyle: FontStyle.italic,
+                      ),
+                      suffixIcon: _textController2.text.isNotEmpty
+                          ? IconButton(
+                              onPressed: () => _textController2.clear(),
+                              icon: const Icon(Icons.clear))
+                          : null),
+                  validator: (command) => command != null && command.isEmpty
+                      ? 'Please fill in a command'
+                      : null,
                 ),
               ),
             ],

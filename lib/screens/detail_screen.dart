@@ -22,7 +22,7 @@ class _DetailScreenState extends State<DetailScreen> {
   // method channel
   static const batteryChannel = MethodChannel("stress_app/battery");
   String batteryLevel = "0";
-  double rating = 0;
+  int rating = 0;
 
   List<CommandEntry> commandSaves = [];
   final ScrollController _listViewScrollController = ScrollController();
@@ -272,7 +272,7 @@ class _DetailScreenState extends State<DetailScreen> {
                           itemBuilder: (context, _) =>
                               const Icon(Icons.star, color: Colors.amber),
                           onRatingUpdate: (rating) => setState(() {
-                                this.rating = rating;
+                                this.rating = rating.round();
                               })),
                     ],
                   ),
@@ -287,22 +287,24 @@ class _DetailScreenState extends State<DetailScreen> {
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(40)),
                               title: const Text('Share '),
-                              content: Column(
-                                children: [
-                                  _buildImage('assets/icons/doctor.jpg'),
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
-                                  const Text(
-                                      "This will allow you to share your data with the doctor using secure connection with Google Firebase "),
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
-                                  ElevatedButton.icon(
-                                      onPressed: () {},
-                                      icon: const Icon(Icons.share),
-                                      label: const Text('Share data')),
-                                ],
+                              content: SingleChildScrollView(
+                                child: Column(
+                                  children: [
+                                    _buildImage('assets/icons/doctor.jpg'),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    const Text(
+                                        "This will allow you to share your data with your doctor using secure connection with Google Health API. "),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    ElevatedButton.icon(
+                                        onPressed: () {},
+                                        icon: const Icon(Icons.share),
+                                        label: const Text('Share data')),
+                                  ],
+                                ),
                               ),
                             );
                           });
@@ -363,8 +365,16 @@ class _DetailScreenState extends State<DetailScreen> {
                           itemBuilder: (buildContext, index) {
                             return InkWell(
                                 onTap: () => _editEntry(commandSaves[index]),
-                                child: CommandListItem(
-                                    commandSaves[index], index + 1));
+                                child: Dismissible(
+                                  key: Key(commandSaves[index].toString()),
+                                  onDismissed: (direction) {
+                                    setState(() {
+                                      commandSaves.removeAt(index);
+                                    });
+                                  },
+                                  child: CommandListItem(
+                                      commandSaves[index], index + 1),
+                                ));
                           },
                         ),
                 ),
@@ -398,7 +408,7 @@ class _DetailScreenState extends State<DetailScreen> {
                           image: "assets/icons/research.jpg",
                           title: "Research Study",
                           content:
-                              "Read and join any of the ongoing study listed below",
+                              "Read and join any of the ongoing studies listed below.",
                         );
                         break;
                       default:
@@ -408,7 +418,7 @@ class _DetailScreenState extends State<DetailScreen> {
                           image: "assets/icons/sleep.jpeg",
                           title: "Sleeping Tips",
                           content:
-                              "Below are a list of tips to help you sleep better",
+                              "Below are a list of tips to help you sleep better.",
                         );
                         break;
                     }

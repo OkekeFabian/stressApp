@@ -33,13 +33,15 @@ class GridItem extends StatelessWidget {
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
             title: Text(title),
-            content: Column(
-              children: [
-                Text(content),
-                const SizedBox(
-                  height: 20,
-                ),
-              ],
+            content: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Text(content),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                ],
+              ),
             ),
           );
         });
