@@ -102,12 +102,12 @@ class CommandEntryDialogState extends State<CommandEntryDialog> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 20),
                       child: Text(
-                        _command.toString(),
+                        _day.toString(),
                       ),
                     ),
                     onSelected: (String value) {
                       setState(() {
-                        _command = value;
+                        _day = value;
                       });
                     },
                     itemBuilder: (context) {
@@ -141,6 +141,9 @@ class CommandEntryDialogState extends State<CommandEntryDialog> {
                   minLines: 3,
                   maxLines: 6,
                   controller: _textController2,
+                  onFieldSubmitted: (val) {
+                    _command = _textController2.text;
+                  },
                   decoration: InputDecoration(
                       border: const OutlineInputBorder(),
                       labelText: "e.g Turn on the Light for 20 minutes",

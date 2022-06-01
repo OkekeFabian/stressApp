@@ -58,6 +58,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
+                      const SizedBox(
+                        height: 120,
+                      ),
                       Container(
                         alignment: Alignment.centerLeft,
                         padding: const EdgeInsets.symmetric(horizontal: 40),

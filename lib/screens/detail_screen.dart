@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:stress_app/utils/const.dart';
 import 'package:stress_app/widgets/custom_clipper.dart';
@@ -24,6 +27,8 @@ class _DetailScreenState extends State<DetailScreen> {
   String batteryLevel = "0";
   int rating = 0;
 
+  Timer timer;
+
   List<CommandEntry> commandSaves = [];
   final ScrollController _listViewScrollController = ScrollController();
   final double _itemExtent = 50.0;
@@ -41,6 +46,34 @@ class _DetailScreenState extends State<DetailScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    listenBattery();
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
+  }
+
+  void listenBattery() {
+    timer = Timer.periodic(
+        const Duration(seconds: 5), (timer) async => getBatteryLevel());
+  }
+
+  // Communicating and calling native kotlin for the google assistant
+  Future getBatteryLevel() async {
+    final int newBatteryLevel =
+        await batteryChannel.invokeMethod("getBatteryLevel");
+    setState(() {
+      batteryLevel = '$newBatteryLevel';
+    });
+    await Future.delayed(const Duration(seconds: 1));
+    _speak();
+  }
+
+  @override
   Widget build(BuildContext context) {
     double statusBarHeight = MediaQuery.of(context).padding.top;
 
@@ -54,13 +87,17 @@ class _DetailScreenState extends State<DetailScreen> {
     double _aspectRatio =
         _width / (_cellHeight + _mainAxisSpacing + (_crossAxisCount + 1));
 
+    List<int> stressLevels = [0, 30, 50, 30, 60, 40, 100];
+
     changeColor(int value) {
-      if (value <= 75) {
+      if (stressLevels[6] <= 75) {
         return Colors.white;
       } else {
         return Colors.red;
       }
     }
+
+    int batteryNew = 0;
 
     return Scaffold(
       backgroundColor: Constants.backgroundColor,
@@ -189,7 +226,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                   color: Constants.lightGreen,
                                   shape: BoxShape.circle),
                             ),
-                            const Text("Asleep"),
+                            const Text("Relax"),
                             Container(
                               margin: const EdgeInsets.only(
                                   left: 10.0, right: 10.0),
@@ -199,7 +236,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                   color: Constants.darkGreen,
                                   shape: BoxShape.circle),
                             ),
-                            const Text("Awake"),
+                            const Text("Stress"),
                             Container(
                               margin: const EdgeInsets.only(
                                   left: 10.0, right: 10.0),
@@ -219,37 +256,37 @@ class _DetailScreenState extends State<DetailScreen> {
                             scrollDirection: Axis.horizontal,
                             children: [
                               ProgressVertical(
-                                value: 50,
+                                value: stressLevels[0],
                                 date: "1",
                                 isShowDate: true,
                               ),
                               ProgressVertical(
-                                value: 50,
+                                value: stressLevels[1],
                                 date: "2",
                                 isShowDate: true,
                               ),
                               ProgressVertical(
-                                value: 45,
+                                value: stressLevels[2],
                                 date: "3",
                                 isShowDate: true,
                               ),
                               ProgressVertical(
-                                value: 30,
+                                value: stressLevels[3],
                                 date: "4",
                                 isShowDate: true,
                               ),
                               ProgressVertical(
-                                value: 50,
+                                value: stressLevels[4],
                                 date: "5",
                                 isShowDate: true,
                               ),
                               ProgressVertical(
-                                value: 20,
+                                value: stressLevels[5],
                                 date: "6",
                                 isShowDate: true,
                               ),
                               ProgressVertical(
-                                value: level,
+                                value: stressLevels[6],
                                 date: "7",
                                 isShowDate: true,
                               ),
@@ -327,9 +364,9 @@ class _DetailScreenState extends State<DetailScreen> {
                   children: [
                     ElevatedButton(
                         onPressed: (() {
-                          getBatteryLevel;
+                          getBatteryLevel();
                           setState(() {
-                            level = 90;
+                            stressLevels[6] = 90;
                             heartLevel = 120;
                             ScaffoldMessenger.of(context)
                                 .showSnackBar(const SnackBar(
@@ -390,6 +427,7 @@ class _DetailScreenState extends State<DetailScreen> {
                 ),
 
                 const SizedBox(height: 30),
+                Text('$batteryLevel'),
                 Text(
                   "MORE",
                   style: TextStyle(
@@ -485,17 +523,6 @@ class _DetailScreenState extends State<DetailScreen> {
     if (save != null) {
       _addcommandSave(save);
     }
-  }
-
-  // Communicating and calling native kotlin for the google assistant
-  Future getBatteryLevel() async {
-    final int newBatteryLevel =
-        await batteryChannel.invokeMethod("getBatteryLevel");
-    setState(() {
-      batteryLevel = '$newBatteryLevel';
-    });
-    await Future.delayed(const Duration(seconds: 1));
-    _speak();
   }
 
   // Text to Speech for the google assistant

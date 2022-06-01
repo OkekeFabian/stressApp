@@ -3,8 +3,13 @@ import 'package:flutter/material.dart';
 import 'screens/home_screen.dart';
 import 'screens/register.dart';
 import 'utils/const.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+import 'widgets/command_class.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 

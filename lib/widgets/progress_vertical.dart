@@ -7,7 +7,8 @@ class ProgressVertical extends StatefulWidget {
   final String date;
   final bool isShowDate;
 
-  ProgressVertical({this.value, this.date, this.isShowDate});
+  const ProgressVertical({Key key, this.value, this.date, this.isShowDate})
+      : super(key: key);
 
   @override
   State<ProgressVertical> createState() => _ProgressVerticalState();
