@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:stress_app/utils/const.dart';
 import 'package:stress_app/widgets/custom_clipper.dart';
 import 'package:stress_app/widgets/grid_item.dart';
@@ -38,6 +39,8 @@ class _DetailScreenState extends State<DetailScreen> {
   int level = 45;
   int heartLevel = 66;
 
+  List<int> stressLevels = [0, 30, 50, 30, 60, 40, 70];
+
   Widget _buildImage(String assetName) {
     return Align(
       child: Image.asset(assetName, width: 100.0),
@@ -45,7 +48,7 @@ class _DetailScreenState extends State<DetailScreen> {
     );
   }
 
-  @override
+  /* @override
   void initState() {
     super.initState();
     listenBattery();
@@ -61,17 +64,8 @@ class _DetailScreenState extends State<DetailScreen> {
     timer = Timer.periodic(
         const Duration(seconds: 5), (timer) async => getBatteryLevel());
   }
-
+ */
   // Communicating and calling native kotlin for the google assistant
-  Future getBatteryLevel() async {
-    final int newBatteryLevel =
-        await batteryChannel.invokeMethod("getBatteryLevel");
-    setState(() {
-      batteryLevel = '$newBatteryLevel';
-    });
-    await Future.delayed(const Duration(seconds: 1));
-    _speak();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,8 +80,6 @@ class _DetailScreenState extends State<DetailScreen> {
         _crossAxisCount;
     double _aspectRatio =
         _width / (_cellHeight + _mainAxisSpacing + (_crossAxisCount + 1));
-
-    List<int> stressLevels = [0, 30, 50, 30, 60, 40, 100];
 
     changeColor(int value) {
       if (stressLevels[6] <= 75) {
@@ -364,8 +356,9 @@ class _DetailScreenState extends State<DetailScreen> {
                   children: [
                     ElevatedButton(
                         onPressed: (() {
-                          getBatteryLevel();
+                          //getBatteryLevel(commandSaves[0].command);
                           setState(() {
+                            getBatteryLevel1();
                             stressLevels[6] = 90;
                             heartLevel = 120;
                             ScaffoldMessenger.of(context)
@@ -382,7 +375,11 @@ class _DetailScreenState extends State<DetailScreen> {
                     const SizedBox(width: 10),
                     Expanded(
                       child: ElevatedButton(
-                          onPressed: _openAddEntryDialog,
+                          onPressed: (() => showDialog(
+                              context: context,
+                              builder: (context) => CommandEntryDialog(
+                                    onClickedDone: addCommand,
+                                  ))),
                           child: const Text("Enter a Google Home Command")),
                     ),
                   ],
@@ -397,35 +394,8 @@ class _DetailScreenState extends State<DetailScreen> {
                       fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 20),
-                Container(
-                  child: (commandSaves.isEmpty)
-                      ? const SizedBox(
-                          child: Text(
-                              'Please Press the button above to Enter a Command'),
-                          height: 40.0,
-                        )
-                      : ListView.builder(
-                          shrinkWrap: true,
-                          reverse: true,
-                          controller: _listViewScrollController,
-                          itemCount: commandSaves.length,
-                          itemBuilder: (buildContext, index) {
-                            return InkWell(
-                                onTap: () => _editEntry(commandSaves[index]),
-                                child: Dismissible(
-                                  key: Key(commandSaves[index].toString()),
-                                  onDismissed: (direction) {
-                                    setState(() {
-                                      commandSaves.removeAt(index);
-                                    });
-                                  },
-                                  child: CommandListItem(
-                                      commandSaves[index], index + 1),
-                                ));
-                          },
-                        ),
-                ),
 
+                Container(child: buildContent(commandSaves)),
                 const SizedBox(height: 30),
                 Text('$batteryLevel'),
                 Text(
@@ -480,49 +450,157 @@ class _DetailScreenState extends State<DetailScreen> {
     );
   }
 
-  void _addcommandSave(CommandEntry commandSave) {
+  Future addCommand(DateTime dateTime, String day, String command) {
+    dateTime = DateTime.now();
+    final newCommand = CommandEntry(dateTime, day, command);
+
     setState(() {
-      commandSaves.add(commandSave);
-      _listViewScrollController.animateTo(
-        commandSaves.length * _itemExtent,
-        duration: const Duration(microseconds: 1),
-        curve: const ElasticInCurve(0.01),
-      );
+      commandSaves.add(newCommand);
     });
   }
 
   // edit an already added google home command
-  _editEntry(CommandEntry commandSave) {
-    Navigator.of(context)
-        .push(
-      MaterialPageRoute<CommandEntry>(
-        builder: (BuildContext context) {
-          return CommandEntryDialog.edit(commandSave);
-        },
-        fullscreenDialog: true,
+
+  Widget buildContent(List<CommandEntry> commands) => (commands.isEmpty)
+      ? const SizedBox(
+          child: Center(
+            child: Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                'No Situations yet! Click the button to add a monitored Situation.',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+          ),
+        )
+      : ListView.builder(
+          shrinkWrap: true,
+          padding: const EdgeInsets.all(8),
+          itemCount: commands.length,
+          itemBuilder: (BuildContext context, int index) {
+            final transaction = commands[index];
+
+            return buildCommand(context, transaction);
+          },
+        );
+
+  Widget buildCommand(
+    BuildContext context,
+    CommandEntry command,
+  ) {
+    final date = DateFormat.yMMMd().format(command.dateTime);
+
+    return Card(
+      color: Colors.white,
+      child: ExpansionTile(
+        tilePadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+        title: Text(
+          command.command,
+          maxLines: 2,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+        ),
+        subtitle: Text(date),
+        trailing: Text(
+          command.day ?? 'Never',
+          style: const TextStyle(
+              color: Colors.green, fontWeight: FontWeight.bold, fontSize: 12),
+        ),
+        children: [
+          buildButtons(context, command),
+        ],
       ),
-    )
-        .then((newSave) {
-      if (newSave != null) {
-        setState(
-            () => commandSaves[commandSaves.indexOf(commandSave)] = newSave);
-      }
+    );
+  }
+
+  Widget buildButtons(BuildContext context, CommandEntry commands) => Row(
+        children: [
+          Expanded(
+            child: TextButton.icon(
+              label: const Text('Edit'),
+              icon: const Icon(Icons.edit),
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => CommandEntryDialog(
+                    commandEntry: commands,
+                    onClickedDone: (dateTime, day, command) =>
+                        editCommand(commands, dateTime, day, command),
+                  ),
+                  fullscreenDialog: true,
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            child: TextButton.icon(
+                label: const Text('Delete'),
+                icon: const Icon(Icons.delete),
+                onPressed: () {
+                  deleteCommand(commands);
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text('A monitored situation has been deleted')));
+                }),
+          ),
+          Expanded(
+            child: TextButton.icon(
+                label: const Text('Trigger'),
+                icon: const Icon(Icons.emergency_rounded),
+                onPressed: () {
+                  getBatteryLevel(commands);
+                  stressLevels[6] = 90;
+                  heartLevel = 120;
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      backgroundColor: Colors.red,
+                      content: SizedBox(
+                        height: 40,
+                        child: Text(
+                            'Nightmare detected, activating respective command'),
+                      )));
+                }),
+          ),
+        ],
+      );
+
+  void editCommand(
+      CommandEntry commandSave, DateTime dateTime, String day, String command) {
+    setState(() {
+      commandSave.dateTime = dateTime;
+      commandSave.day = day;
+      commandSave.command = command;
+    });
+  }
+  // Add a google home command
+
+  void deleteCommand(CommandEntry command) {
+    setState(() {
+      commandSaves.remove(command);
     });
   }
 
-  // Add a google home command
-  Future _openAddEntryDialog() async {
-    CommandEntry save =
-        await Navigator.of(context).push(MaterialPageRoute<CommandEntry>(
-            builder: (BuildContext context) {
-              return CommandEntryDialog.add(commandSaves.isNotEmpty
-                  ? commandSaves.last.command
-                  : 'Never');
-            },
-            fullscreenDialog: true));
-    if (save != null) {
-      _addcommandSave(save);
-    }
+  Future _speak1(CommandEntry command) async {
+    debugPrint(command.command);
+    await flutterTts.speak(command.command);
+  }
+
+  Future getBatteryLevel(CommandEntry command) async {
+    final int newBatteryLevel =
+        await batteryChannel.invokeMethod("getBatteryLevel");
+    setState(() {
+      batteryLevel = '$newBatteryLevel';
+    });
+    await Future.delayed(const Duration(seconds: 1));
+
+    _speak1(command);
+  }
+
+  Future getBatteryLevel1() async {
+    final int newBatteryLevel =
+        await batteryChannel.invokeMethod("getBatteryLevel");
+    setState(() {
+      batteryLevel = '$newBatteryLevel';
+    });
+    await Future.delayed(const Duration(seconds: 1));
+
+    _speak();
   }
 
   // Text to Speech for the google assistant

@@ -2,42 +2,34 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:keyboard_dismisser/keyboard_dismisser.dart';
-import 'package:lottie/lottie.dart';
-
 import 'command_class.dart';
 
 //For the User to add Google Commands with other details
 
 class CommandEntryDialog extends StatefulWidget {
-  final String initialDay;
-  final CommandEntry commandEntryToEdit;
+  final CommandEntry commandEntry;
+  final Function(
+    DateTime dateTime,
+    String day,
+    String command,
+  ) onClickedDone;
 
-  CommandEntryDialog.add(this.initialDay) : commandEntryToEdit = null;
-
-  CommandEntryDialog.edit(this.commandEntryToEdit)
-      : initialDay = commandEntryToEdit.command;
+  const CommandEntryDialog(
+      {Key key, this.commandEntry, @required this.onClickedDone})
+      : super(key: key);
 
   @override
-  // ignore: no_logic_in_create_state
-  CommandEntryDialogState createState() {
-    if (commandEntryToEdit != null) {
-      return CommandEntryDialogState(commandEntryToEdit.dateTime,
-          commandEntryToEdit.day, commandEntryToEdit.command);
-    } else {
-      return CommandEntryDialogState(DateTime.now(), initialDay, "Never");
-    }
-  }
+  _CommandEntryDialogState createState() => _CommandEntryDialogState();
 }
 
-class CommandEntryDialogState extends State<CommandEntryDialog> {
+class _CommandEntryDialogState extends State<CommandEntryDialog> {
+  final formKey = GlobalKey<FormState>();
+  final experienceController = TextEditingController();
+
   DateTime _dateTime = DateTime.now();
-  String _day;
-  String _command;
+  String _rating;
 
-  final _textController2 = TextEditingController();
-
-  List<String> dayOptions = [
+  List<String> topicOptions = [
     'Every Monday',
     'Every Tuesday',
     'Every Wednesday',
@@ -47,125 +39,164 @@ class CommandEntryDialogState extends State<CommandEntryDialog> {
     'Every Sunday',
   ];
 
-  CommandEntryDialogState(this._dateTime, this._day, this._command);
-
-  Widget _createAppBar(BuildContext context) {
-    return AppBar(
-      title: widget.commandEntryToEdit == null
-          ? const Text("New entry")
-          : const Text("Edit entry"),
-      actions: [
-        ElevatedButton(
-          onPressed: () {
-            Navigator.of(context).pop(CommandEntry(_dateTime, _day, _command));
-          },
-          child: const Text(
-            'SAVE',
-          ),
-        ),
-      ],
-    );
+  @override
+  void dispose() {
+    experienceController.dispose();
+    super.dispose();
   }
 
-  Widget _buildImage(String assetName) {
-    return Align(
-      child: Lottie.asset(assetName, width: 150.0),
-      alignment: Alignment.bottomCenter,
-    );
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.commandEntry != null) {
+      final commandEntryEdit = widget.commandEntry;
+
+      experienceController.text = commandEntryEdit.command;
+      _dateTime = commandEntryEdit.dateTime;
+      _rating = commandEntryEdit.day;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _createAppBar(context),
-      body: SingleChildScrollView(
-        child: KeyboardDismisser(
-          gestures: const [GestureType.onTap],
-          child: Column(
-            children: [
-              Card(
-                child: ListTile(
-                  leading: Icon(Icons.today, color: Colors.grey[500]),
-                  title: DateTimeItem(
-                    dateTime: _dateTime,
-                    onChanged: (dateTime) =>
-                        setState(() => _dateTime = dateTime),
-                  ),
-                ),
-              ),
-              Card(
-                child: ListTile(
-                  leading: Icon(Icons.bar_chart, color: Colors.grey[500]),
-                  title: const Text('Repeat'),
-                  trailing: PopupMenuButton<String>(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 20),
-                      child: Text(
-                        _day.toString(),
-                      ),
-                    ),
-                    onSelected: (String value) {
-                      setState(() {
-                        _day = value;
-                      });
-                    },
-                    itemBuilder: (context) {
-                      return dayOptions
-                          .map<PopupMenuItem<String>>((String value) {
-                        return PopupMenuItem(
-                            child: Text(value.toString()), value: value);
-                      }).toList();
-                    },
-                  ),
-                ),
-              ),
-              const Card(
-                child: ListTile(
-                  leading: Text('->',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                          fontSize: 15)),
-                  title: Text(
-                      'Type in an Instruction or Sets of Instructions to complete and include a duration if needed',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                          fontSize: 15)),
-                ),
-              ),
-              ListTile(
-                leading: Icon(Icons.speaker_notes, color: Colors.grey[500]),
-                title: TextFormField(
-                  minLines: 3,
-                  maxLines: 6,
-                  controller: _textController2,
-                  onFieldSubmitted: (val) {
-                    _command = _textController2.text;
-                  },
-                  decoration: InputDecoration(
-                      border: const OutlineInputBorder(),
-                      labelText: "e.g Turn on the Light for 20 minutes",
-                      labelStyle: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 14,
-                        fontStyle: FontStyle.italic,
-                      ),
-                      suffixIcon: _textController2.text.isNotEmpty
-                          ? IconButton(
-                              onPressed: () => _textController2.clear(),
-                              icon: const Icon(Icons.clear))
-                          : null),
-                  validator: (command) => command != null && command.isEmpty
-                      ? 'Please fill in a command'
-                      : null,
-                ),
-              ),
-            ],
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        appBar: _createAppBar(context),
+        body: Form(
+          key: formKey,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const SizedBox(height: 8),
+                buildDate(),
+                const SizedBox(height: 8),
+                buildAnxiety(),
+                const SizedBox(height: 8),
+                buildExperienceField(),
+                const SizedBox(height: 10),
+                buildExperience(),
+                const SizedBox(height: 8),
+              ],
+            ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _createAppBar(BuildContext context) {
+    final isEditing = widget.commandEntry != null;
+    final title = isEditing ? 'Edit Command' : 'Add Command';
+    return AppBar(
+      title: Text(title),
+      actions: [
+        //buildCancelButton(context),
+        buildAddButton(context, isEditing: isEditing),
+      ],
+    );
+  }
+
+  Widget buildDate() => Card(
+        child: ListTile(
+          leading: Icon(Icons.today, color: Colors.grey[500]),
+          title: DateTimeItem(
+            dateTime: _dateTime,
+            onChanged: (dateTime) => setState(() => _dateTime = dateTime),
+          ),
+        ),
+      );
+
+  Widget buildAnxiety() => Card(
+        child: ListTile(
+          leading: Icon(Icons.bar_chart, color: Colors.grey[500]),
+          title: const Text('Repeat'),
+          trailing: PopupMenuButton<String>(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+              child: Text(
+                (_rating == null) ? 'Never' : _rating.toString(),
+              ),
+            ),
+            onSelected: (String value) {
+              setState(() {
+                _rating = value;
+              });
+            },
+            itemBuilder: (context) {
+              return topicOptions.map<PopupMenuItem<String>>((String value) {
+                return PopupMenuItem(
+                    child: Text(value.toString()), value: value);
+              }).toList();
+            },
+          ),
+        ),
+      );
+
+  Widget buildExperienceField() => const Card(
+        child: ListTile(
+          leading: Text('1/3.',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                  fontSize: 15)),
+          title: Text('Please enter a command or set of commands',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                  fontSize: 15)),
+        ),
+      );
+
+  Widget buildExperience() => ListTile(
+        leading: Icon(Icons.speaker_notes, color: Colors.grey[500]),
+        title: TextFormField(
+          minLines: 3,
+          maxLines: 6,
+          controller: experienceController,
+          decoration: InputDecoration(
+              border: const OutlineInputBorder(),
+              labelText: "e.g Turn the light on",
+              labelStyle: const TextStyle(
+                color: Colors.black,
+                fontSize: 14,
+                fontStyle: FontStyle.italic,
+              ),
+              suffixIcon: experienceController.text.isNotEmpty
+                  ? IconButton(
+                      onPressed: () => experienceController.clear(),
+                      icon: const Icon(Icons.clear))
+                  : null),
+          validator: (experience) => experience != null && experience.isEmpty
+              ? 'Please a command'
+              : null,
+        ),
+      );
+
+  Widget buildAddButton(BuildContext context, {bool isEditing}) {
+    final text = isEditing ? 'Save' : 'Add';
+
+    return ElevatedButton(
+      child: Text(text),
+      onPressed: () async {
+        final isValid = formKey.currentState.validate();
+
+        if (isValid) {
+          final command = experienceController.text;
+          final day = _rating;
+          final dateTime = _dateTime;
+
+          widget.onClickedDone(
+            dateTime,
+            day,
+            command,
+          );
+
+          Navigator.of(context).pop();
+        }
+      },
     );
   }
 }
@@ -188,12 +219,12 @@ class DateTimeItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: [
+      children: <Widget>[
         Expanded(
           child: InkWell(
             onTap: (() => _showDatePicker(context)),
             child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 8.0),
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Text(DateFormat('EEEE, MMMM d').format(date))),
           ),
         ),

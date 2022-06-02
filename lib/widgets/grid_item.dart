@@ -20,7 +20,7 @@ class GridItem extends StatelessWidget {
 
   Widget _buildImage(String assetName) {
     return Align(
-      child: Image.asset(assetName, width: 120.0),
+      child: Image.asset(assetName, width: 135.0),
       alignment: Alignment.bottomCenter,
     );
   }
@@ -57,7 +57,7 @@ class GridItem extends StatelessWidget {
             color: Colors.white,
           ),
           child: Padding(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(5),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
