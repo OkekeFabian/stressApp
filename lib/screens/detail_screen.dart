@@ -425,6 +425,8 @@ class _DetailScreenState extends State<DetailScreen> {
                           color: Constants.darkGreen,
                           image: "assets/icons/research.jpg",
                           title: "Research Study",
+                          image1: "assets/icons/study2.jpeg",
+                          image2: "assets/icons/study1.jpeg",
                           content:
                               "Read and join any of the ongoing studies listed below.",
                         );
@@ -434,9 +436,12 @@ class _DetailScreenState extends State<DetailScreen> {
                           status: "Sleeping tips",
                           color: Constants.lightBlue,
                           image: "assets/icons/sleep.jpeg",
-                          title: "Sleeping Tips",
+                          title:
+                              "Sleeping Tips By Rachid Finge (Google netherlands)",
                           content:
-                              "Below are a list of tips to help you sleep better.",
+                              "Below are a list of tips to help you sleep better:\n1.Start adjusting on time… or don’t adjust at all.\n2.Find your perfect room temperature.\n3.Embrace the winter cold once you wake up.\n3.Never snooze again.\n4.Imitate a sunrise.",
+                          image1: "assets/icons/sleeping.jpg",
+                          image2: "assets/icons/sleeping1.jpg",
                         );
                         break;
                     }

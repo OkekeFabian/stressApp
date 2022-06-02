@@ -7,6 +7,8 @@ class GridItem extends StatelessWidget {
   final String title;
   final String content;
   final String image;
+  final String image1;
+  final String image2;
   final Color color;
 
   const GridItem({
@@ -15,12 +17,21 @@ class GridItem extends StatelessWidget {
     this.title,
     this.content,
     this.image,
+    this.image1,
+    this.image2,
     this.color,
   }) : super(key: key);
 
   Widget _buildImage(String assetName) {
     return Align(
       child: Image.asset(assetName, width: 135.0),
+      alignment: Alignment.bottomCenter,
+    );
+  }
+
+  Widget _buildImage1(String assetName) {
+    return Align(
+      child: Image.asset(assetName, width: 155.0),
       alignment: Alignment.bottomCenter,
     );
   }
@@ -40,6 +51,11 @@ class GridItem extends StatelessWidget {
                   const SizedBox(
                     height: 20,
                   ),
+                  _buildImage1(image1),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  _buildImage1(image2)
                 ],
               ),
             ),
