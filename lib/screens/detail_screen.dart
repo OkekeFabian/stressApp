@@ -89,8 +89,6 @@ class _DetailScreenState extends State<DetailScreen> {
       }
     }
 
-    int batteryNew = 0;
-
     return Scaffold(
       backgroundColor: Constants.backgroundColor,
       body: Stack(
@@ -468,15 +466,8 @@ class _DetailScreenState extends State<DetailScreen> {
 
   Widget buildContent(List<CommandEntry> commands) => (commands.isEmpty)
       ? const SizedBox(
-          child: Center(
-            child: Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                'No Situations yet! Click the button to add a monitored Situation.',
-                style: TextStyle(fontSize: 20),
-              ),
-            ),
-          ),
+          child: Text('Please Press the button above to Enter a Command'),
+          height: 40.0,
         )
       : ListView.builder(
           shrinkWrap: true,
